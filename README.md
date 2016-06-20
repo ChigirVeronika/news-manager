@@ -1,6 +1,6 @@
 # News Manager
 
-One Paragraph of project description goes here
+News Management application using Oracle Database, data access with JDBC, Maven, Log4j, Spring for backend; DBUnit and Mockito for testing.
 
 ## Getting Started
 
