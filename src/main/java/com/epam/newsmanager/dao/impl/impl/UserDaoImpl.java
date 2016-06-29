@@ -3,7 +3,8 @@ package com.epam.newsmanager.dao.impl.impl;
 import com.epam.newsmanager.dao.exception.DaoException;
 import com.epam.newsmanager.dao.impl.UserDao;
 import com.epam.newsmanager.entity.User;
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import java.sql.Connection;
@@ -12,8 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
 
 import static com.epam.newsmanager.dao.name.ParameterName.*;
 
@@ -35,7 +34,6 @@ public class UserDaoImpl implements UserDao {
 
     private BasicDataSource dataSource;
     private DataSourceUtils dataSourceUtils;
-    private BasicDataSource dataSource;
 
     /**
      * Create new record from object

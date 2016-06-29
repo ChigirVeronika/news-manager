@@ -1,7 +1,7 @@
 package com.epam.newsmanager.dao.impl.impl;
 
-import com.epam.newsmanager.dao.impl.AuthorDao;
-import com.epam.newsmanager.entity.Author;
+import com.epam.newsmanager.dao.impl.CommentDao;
+import com.epam.newsmanager.entity.Comment;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -18,106 +18,107 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test class with BDUnit technology for AuthorDaoImpl class.
+ * Test class with BDUnit technology for CommentDaoImpl class.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="classpath:spring-test.xml")
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
         DbUnitTestExecutionListener.class,
         TransactionalTestExecutionListener.class})
-public class AuthorDaoImplTest {
+public class CommentDaoImplTest {
 
     @Autowired
-    private AuthorDao authorDao;
+    private CommentDao commentsDao;
 
     @Transactional
     @Rollback(true)
     @Test
     public void testInsert() throws Exception {
-        Author author = new Author();
-        author.setAuthorName("Test");
-        authorDao.insert(author);
-        Assert.assertNotEquals(0, author.getAuthorId());
+        Comment comment = new Comment();
+        comment.setNewsId(1);
+        comment.setCreationDate(new Timestamp(new Date().getTime()));
+        comment.setCommentText("Something");
+        commentsDao.insert(comment);
+        Assert.assertNotEquals(comment.getCommentId(), 0);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "classpath:dataset.xml", type = DatabaseOperation.DELETE_ALL)
     @Test
     public void testUpdate() throws Exception {
-        Author author = new Author();
-        author.setAuthorId(1);
-        author.setAuthorName("Test");
-        authorDao.update(author);
-        Assert.assertEquals(authorDao.getById(1), author);
+        Comment comment = new Comment();
+        comment.setCommentId(1);
+        comment.setNewsId(1);
+        comment.setCreationDate(Timestamp.valueOf("2016-06-29 16:07:10"));
+        comment.setCommentText("Something");
+        commentsDao.update(comment);
+        Assert.assertEquals(comment, commentsDao.getById(1));
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "classpath:dataset.xml", type = DatabaseOperation.DELETE_ALL)
     @Test
     public void testDelete() throws Exception {
-        authorDao.delete(1);
-        Assert.assertEquals(authorDao.getById(1), null);
+        commentsDao.delete(1);
+        Assert.assertEquals(commentsDao.getById(1), null);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "classpath:dataset.xml", type = DatabaseOperation.DELETE_ALL)
     @Test
     public void testGetAll() throws Exception {
-        Author author = new Author();
-        author.setAuthorId(1);
-        author.setAuthorName("John Smith");
+        Comment comment = new Comment();
+        comment.setCommentId(1);
+        comment.setNewsId(1);
+        comment.setCreationDate(Timestamp.valueOf("2016-06-29 16:07:10"));
+        comment.setCommentText("Something");
 
-        Author author1 = new Author();
-        author1.setAuthorId(2);
-        author1.setAuthorName("Joe Bloggs");
+        Comment comment1 = new Comment();
+        comment1.setCommentId(3);
+        comment1.setNewsId(1);
+        comment1.setCreationDate(Timestamp.valueOf("2016-06-29 16:07:10"));
+        comment1.setCommentText("Hello");
 
-        Set<Author> searchResults = authorDao.getAll();
-        assertThat(searchResults).contains(author, author1);
+        assertThat(commentsDao.getAll()).contains(comment, comment1);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "classpath:dataset.xml", type = DatabaseOperation.DELETE_ALL)
     @Test
     public void testGetById() throws Exception {
-        Author author = new Author();
-        author.setAuthorId(1);
-        author.setAuthorName("John Smith");//jane roe
-        Assert.assertEquals(authorDao.getById(1), author);
+        Comment comment = new Comment();
+        comment.setCommentId(1);
+        comment.setNewsId(1);
+        comment.setCreationDate(Timestamp.valueOf("2016-06-29 16:07:10"));
+        comment.setCommentText("Something");
+        Assert.assertEquals(comment, commentsDao.getById(1));
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "classpath:dataset.xml", type = DatabaseOperation.DELETE_ALL)
     @Test
     public void testGetByNewsId() throws Exception {
-        Set<Author> authors = new HashSet<Author>();
-
-        Author author = new Author();
-        author.setAuthorId(1);
-        author.setAuthorName("John Smith");
-
-        Author author1 = new Author();
-        author1.setAuthorId(2);
-        author1.setAuthorName("Joe Bloggs");
-
-        authors.add(author);
-        authors.add(author1);
-
-        Assert.assertEquals(authors, authorDao.getByNewsId(1));
-    }
-
-    @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
-    @DatabaseTearDown(value = "classpath:dataset.xml", type = DatabaseOperation.DELETE_ALL)
-    @Test
-    public void testGetByName() throws Exception {
-        Author author = new Author();
-        author.setAuthorId(1);
-        author.setAuthorName("John Smith");
-        Assert.assertEquals(author, authorDao.getByName(author));
+        Set<Comment> comments = new HashSet<Comment>(2);
+        Comment comment = new Comment();
+        comment.setCommentId(1);
+        comment.setNewsId(1);
+        comment.setCreationDate(Timestamp.valueOf("2016-06-20 20:15:11"));
+        comment.setCommentText("Something");
+        Comment comment1 = new Comment();
+        comment1.setCommentId(3);
+        comment1.setNewsId(1);
+        comment1.setCreationDate(Timestamp.valueOf("2016-06-20 20:15:11"));
+        comment1.setCommentText("Hello");
+        comments.add(comment);
+        comments.add(comment1);
+        Assert.assertEquals(comments, commentsDao.getByNewsId(1));
     }
 }

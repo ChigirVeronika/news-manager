@@ -1,12 +1,10 @@
 package com.epam.newsmanager.dao.impl.impl;
 
-import com.epam.newsmanager.dao.impl.AuthorDao;
-import com.epam.newsmanager.dao.GenericDao;
 import com.epam.newsmanager.dao.exception.DaoException;
+import com.epam.newsmanager.dao.impl.AuthorDao;
 import com.epam.newsmanager.entity.Author;
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.util.StreamUtils;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import java.sql.Connection;

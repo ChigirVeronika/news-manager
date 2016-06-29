@@ -1,11 +1,9 @@
 package com.epam.newsmanager.dao.impl.impl;
 
-import com.epam.newsmanager.dao.GenericDao;
 import com.epam.newsmanager.dao.exception.DaoException;
 import com.epam.newsmanager.dao.impl.CommentDao;
 import com.epam.newsmanager.entity.Comment;
-import com.epam.newsmanager.entity.User;
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 

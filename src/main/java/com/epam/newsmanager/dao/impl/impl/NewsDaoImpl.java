@@ -6,7 +6,7 @@ import com.epam.newsmanager.entity.Author;
 import com.epam.newsmanager.entity.News;
 import com.epam.newsmanager.entity.Tag;
 import com.epam.newsmanager.entity.dto.SearchNewsDto;
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
