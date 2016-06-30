@@ -33,10 +33,7 @@ public class NewsDaoImpl implements NewsDao {
     private static final String DELETE_NEWS = "DELETE FROM NEWS WHERE NEWS_ID = ?";
     private static final String GET_NEWS_BY_ID = "SELECT * FROM NEWS WHERE NEWS_ID = ?";
     private static final String GET_MOST_COMMENTED = "select news_id, count(*) c from admin.comments group by NEWS_ID order by c desc";
-    private StringBuilder searchQuery = new StringBuilder("SELECT n.NEWS_ID, TITLE, SHORT_TEXT, FULL_TEXT, CREATION_DATE," +
-            "  MODIFICATION_DATE, na.AUTHOR_ID, nt.tag_id " +
-            "  FROM NEWS n inner join NEWS_AUTHOR na on na.NEWS_ID = n.NEWS_ID " +
-            "inner join news_tag nt on n.news_id = nt.news_id ");
+    
 
     private static final Logger LOGGER = Logger.getLogger(NewsDaoImpl.class);
 
@@ -226,30 +223,12 @@ public class NewsDaoImpl implements NewsDao {
         Statement statement = null;
         Set<News> newsSet = new HashSet<News>();
 
-        if (searchNews.getAuthor() == null) {
-            searchQuery.append("where tag_id in (");
-            for (Tag tag : searchNews.getTags()) {
-                searchQuery.append(tag.getTagId() + ", ");
-            }
-            searchQuery.deleteCharAt(searchQuery.length() - 2);
-            searchQuery.append(")");
-        } else {
-            if (searchNews.getTags() == null || searchNews.getTags().isEmpty()) {
-                searchQuery.append("where author_id = " + searchNews.getAuthor().getAuthorId());
-            } else {
-                searchQuery.append("where tag_id in (");
-                for (Tag tag : searchNews.getTags()) {
-                    searchQuery.append(tag.getTagId() + ", ");
-                }
-                searchQuery.deleteCharAt(searchQuery.length() - 2);
-                searchQuery.append(") and author_id = " + searchNews.getAuthor().getAuthorId());
-            }
-        }
+        //// TODO: 6/30/2016  
 
         try {
             connection = dataSourceUtils.getConnection(dataSource);
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(searchQuery.toString());
+            ResultSet resultSet = statement.executeQuery("");
             while (resultSet.next()) {
                 News news = new News();
                 parseResultSet(resultSet, news);
