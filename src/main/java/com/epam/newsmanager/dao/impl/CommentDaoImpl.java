@@ -1,8 +1,8 @@
-package com.epam.newsmanager.dao.impl.impl;
+package com.epam.newsmanager.dao.impl;
 
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.RoleDao;
-import com.epam.newsmanager.entity.Role;
+import com.epam.newsmanager.dao.CommentDao;
+import com.epam.newsmanager.entity.Comment;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -13,20 +13,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-import static com.epam.newsmanager.dao.name.ParameterName.*;
 
 /**
- * Dao implementation for Oracle database and Role entity.
+ * Dao implementation for Oracle database and Comment entity.
  */
-public class RoleDaoImpl implements RoleDao {
+public class CommentDaoImpl implements CommentDao {
 
-    private static final String INSERT_ROLE = "INSERT INTO ROLES (USER_ID, ROLE_NAME) VALUES (?,?)";
-    private static final String UPDATE_ROLE = "UPDATE ROLES SET USER_ID = ?, ROLE_NAME = ?";
-    private static final String DELETE_ROLE = "DELETE FROM ROLES WHERE USER_ID = ?";
-    private static final String GET_BY_USER_ID = "SELECT * FROM ROLES WHERE USER_ID  = ?";
-    private static final String GET_ALL = "SELECT * FROM ROLES";
+        private static final String INSERT_COMMENT = "INSERT INTO COMMENTS (NEWS_ID, COMMENT_TEXT, CREATION_DATE) VALUES (?, ?, ?)";
+    private static final String UPDATE_COMMENT = "UPDATE COMMENTS SET COMMENT_TEXT = ?";
+    private static final String DELETE_COMMENT = "DELETE FROM COMMENTS WHERE COMMENT_ID = ?";
+    private static final String GET_BY_ID = "SELECT * FROM COMMENTS WHERE COMMENT_ID = ?";
+    private static final String GET_BY_NEWS_ID = "SELECT * FROM COMMENTS WHERE NEWS_ID = ?";
+    private static final String GET_ALL = "SELECT * FROM COMMENTS";
 
-    private static final Logger LOGGER = Logger.getLogger(RoleDaoImpl.class);
+    private static final String COMMENT_ID = "COMMENT_ID";
+    private static final String NEWS_ID = "NEWS_ID";
+    private static final String COMMENT_TEXT = "COMMENT_TEXT";
+    private static final String CREATION_DATE = "CREATION_DATE";
+
+    private static final Logger LOGGER = Logger.getLogger(CommentDaoImpl.class);
 
     private BasicDataSource dataSource;
     private DataSourceUtils dataSourceUtils;
@@ -34,7 +39,6 @@ public class RoleDaoImpl implements RoleDao {
     public void setDataSource(BasicDataSource dataSource) {
         this.dataSource = dataSource;
     }
-
     /**
      * Create new record from object
      *
@@ -43,21 +47,23 @@ public class RoleDaoImpl implements RoleDao {
      * @throws DaoException
      */
     @Override
-    public long insert(Role object) throws DaoException {
-        long id = 0;
+    public Long insert(Comment object) throws DaoException {
+        Long id = new Long(0);
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(INSERT_ROLE);
-            preparedStatement.setLong(1, object.getUserId());
-            preparedStatement.setString(2, object.getRoleName());
+            preparedStatement = connection.prepareStatement(INSERT_COMMENT);
+
+            preparedStatement.setLong(1, object.getNewsId());
+            preparedStatement.setString(2, object.getCommentText());
+            preparedStatement.setTimestamp(3, object.getCreationDate());
             preparedStatement.executeUpdate();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 id = resultSet.getLong(1);
-                object.setUserId(id);
+                object.setCommentId(id);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -79,14 +85,14 @@ public class RoleDaoImpl implements RoleDao {
      * @throws DaoException
      */
     @Override
-    public void update(Role object) throws DaoException {
+    public void update(Comment object) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(UPDATE_ROLE);
-            preparedStatement.setLong(1, object.getUserId());
-            preparedStatement.setString(2, object.getRoleName());
+            preparedStatement = connection.prepareStatement(UPDATE_COMMENT);
+
+            preparedStatement.setString(1, object.getCommentText());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -107,14 +113,16 @@ public class RoleDaoImpl implements RoleDao {
      * @throws DaoException
      */
     @Override
-    public void delete(long id) throws DaoException {
+    public void delete(Long id) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(DELETE_ROLE);
-            preparedStatement.setLong( 1, id);
+            preparedStatement = connection.prepareStatement(DELETE_COMMENT);
+
+            preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
@@ -134,18 +142,19 @@ public class RoleDaoImpl implements RoleDao {
      * @throws DaoException
      */
     @Override
-    public Set<Role> getAll() throws DaoException {
+    public Set<Comment> getAll() throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        Set<Role> roles = new HashSet<Role>();
+        Set<Comment> comments = new HashSet<Comment>();
         try {
             connection = dataSourceUtils.getConnection(dataSource);
             preparedStatement = connection.prepareStatement(GET_ALL);
             ResultSet resultSet = preparedStatement.executeQuery();
+
             while (resultSet.next()) {
-                Role role = new Role();
-                parseResultSet(resultSet, role);
-                roles.add(role);
+                Comment comment = new Comment();
+                parseResultSet(resultSet, comment);
+                comments.add(comment);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -157,28 +166,28 @@ public class RoleDaoImpl implements RoleDao {
                 LOGGER.error(e);
             }
         }
-        return roles;
+        return comments;
     }
 
     /**
-     * Return object role by user id or null
+     * Return object with primary key 'key' or null
      *
-     * @param userId user id of role object
-     * @return object with or null
-     * @throws DaoException if cannot return user role
+     * @param id primary key of object
+     * @return object with primary key 'key' or null
+     * @throws DaoException
      */
     @Override
-    public Role getById(long userId) throws DaoException {
+    public Comment getById(Long id) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        Role role = new Role();
+        Comment comment = new Comment();
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(GET_BY_USER_ID);
-            preparedStatement.setLong(1, userId);
+            preparedStatement = connection.prepareStatement(GET_BY_ID);
             ResultSet resultSet = preparedStatement.executeQuery();
+
             if (resultSet.next()) {
-                parseResultSet(resultSet, role);
+                parseResultSet(resultSet, comment);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -190,11 +199,48 @@ public class RoleDaoImpl implements RoleDao {
                 LOGGER.error(e);
             }
         }
-        return role;
+        return comment;
     }
 
-    private void parseResultSet(ResultSet resultSet, Role role) throws SQLException {
-        role.setUserId(resultSet.getLong(USER_ID));
-        role.setRoleName(resultSet.getString(ROLE_NAME));
+    /**
+     * Get comment by news id
+     *
+     * @param newsId news unique identifier
+     * @return set of comments
+     * @throws DaoException if cannot get news by id
+     */
+    @Override
+    public Set<Comment> getByNewsId(Long newsId) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        Set<Comment> comments = new HashSet<Comment>();
+        try {
+            connection = dataSourceUtils.getConnection(dataSource);
+            preparedStatement = connection.prepareStatement(GET_BY_NEWS_ID);
+            preparedStatement.setLong(1, newsId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Comment comment = new Comment();
+                parseResultSet(resultSet, comment);
+                comments.add(comment);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                LOGGER.error(e);
+            }
+        }
+        return comments;
+    }
+
+    private void parseResultSet(ResultSet resultSet, Comment comment) throws SQLException {
+       comment.setCommentId(resultSet.getLong(COMMENT_ID));
+       comment.setNewsId(resultSet.getLong(NEWS_ID));
+       comment.setCommentText(resultSet.getString(COMMENT_TEXT));
+       comment.setCreationDate(resultSet.getTimestamp(CREATION_DATE));
     }
 }

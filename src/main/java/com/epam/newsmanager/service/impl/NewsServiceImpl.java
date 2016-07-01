@@ -1,9 +1,9 @@
 package com.epam.newsmanager.service.impl;
 
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.impl.AuthorDaoImpl;
-import com.epam.newsmanager.dao.impl.impl.NewsDaoImpl;
-import com.epam.newsmanager.dao.impl.impl.TagDaoImpl;
+import com.epam.newsmanager.dao.impl.AuthorDaoImpl;
+import com.epam.newsmanager.dao.impl.NewsDaoImpl;
+import com.epam.newsmanager.dao.impl.TagDaoImpl;
 import com.epam.newsmanager.entity.Author;
 import com.epam.newsmanager.entity.News;
 import com.epam.newsmanager.entity.Tag;
@@ -80,7 +80,7 @@ public class NewsServiceImpl implements NewsService {
      * @throws ServiceException
      */
     @Override
-    public void deleteNews(long id) throws ServiceException {
+    public void deleteNews(Long id) throws ServiceException {
         try {
             newsDao.delete(id);
         } catch (DaoException e) {
@@ -113,7 +113,7 @@ public class NewsServiceImpl implements NewsService {
      * @throws ServiceException
      */
     @Override
-    public News getOneNews(long id) throws ServiceException {
+    public News getOneNews(Long id) throws ServiceException {
         News news;
         try{
             news = newsDao.getById(id);
@@ -131,7 +131,7 @@ public class NewsServiceImpl implements NewsService {
      * @throws ServiceException
      */
     @Override
-    public void addTagsToNews(long newsId, Set<Tag> tags) throws ServiceException {
+    public void addTagsToNews(Long newsId, Set<Tag> tags) throws ServiceException {
         try {
             for (Tag tag : tags) {
                 if (tagDao.getByName(tag) == null) {
@@ -152,7 +152,7 @@ public class NewsServiceImpl implements NewsService {
      * @throws ServiceException
      */
     @Override
-    public void addAuthorsToNews(long newsId, Set<Author> authors) throws ServiceException {
+    public void addAuthorsToNews(Long newsId, Set<Author> authors) throws ServiceException {
         try {
             for (Author author : authors) {
                 if (authorDao.getByName(author) == null) {

@@ -1,6 +1,5 @@
-package com.epam.newsmanager.dao.impl;
+package com.epam.newsmanager.dao;
 
-import com.epam.newsmanager.dao.GenericDao;
 import com.epam.newsmanager.dao.exception.DaoException;
 import com.epam.newsmanager.entity.Tag;
 
@@ -27,5 +26,5 @@ public interface TagDao extends GenericDao<Tag> {
      * @return set of tags with corresponding news id
      * @throws DaoException
      */
-    Set<Tag> getByNewsId(int newsId) throws DaoException;
+    Set<Tag> getByNewsId(Long newsId) throws DaoException;
 }

@@ -38,7 +38,7 @@ public interface NewsService {
      * @param id unique identified of object to delete
      * @throws ServiceException
      */
-    void deleteNews(long id) throws ServiceException;
+    void deleteNews(Long id) throws ServiceException;
 
     /**
      * Return list of all items
@@ -55,7 +55,7 @@ public interface NewsService {
      * @return object with primary key 'key' or null
      * @throws ServiceException
      */
-    News getOneNews(long id) throws ServiceException;
+    News getOneNews(Long id) throws ServiceException;
 
     /**
      * Add tags to news
@@ -64,7 +64,7 @@ public interface NewsService {
      * @param tags   set of tags to add
      * @throws ServiceException
      */
-    void addTagsToNews(long newsId, Set<Tag> tags) throws ServiceException;
+    void addTagsToNews(Long newsId, Set<Tag> tags) throws ServiceException;
 
     /**
      * Add authors to news
@@ -73,7 +73,7 @@ public interface NewsService {
      * @param authors set of authors to add
      * @throws ServiceException
      */
-    void addAuthorsToNews(long newsId, Set<Author> authors) throws ServiceException;
+    void addAuthorsToNews(Long newsId, Set<Author> authors) throws ServiceException;
 
     /**
      * Get sorted news by comments

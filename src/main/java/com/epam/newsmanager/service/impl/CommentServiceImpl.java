@@ -1,7 +1,7 @@
 package com.epam.newsmanager.service.impl;
 
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.impl.CommentDaoImpl;
+import com.epam.newsmanager.dao.impl.CommentDaoImpl;
 import com.epam.newsmanager.entity.Comment;
 import com.epam.newsmanager.service.CommentService;
 import com.epam.newsmanager.service.exception.ServiceException;
@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
      * @throws ServiceException
      */
     @Override
-    public void deleteComment(long id) throws ServiceException {
+    public void deleteComment(Long id) throws ServiceException {
         try{
             commentDao.delete(id);
         } catch (DaoException e) {
@@ -91,7 +91,7 @@ public class CommentServiceImpl implements CommentService {
      * @throws ServiceException
      */
     @Override
-    public Comment getCommentById(long id) throws ServiceException {
+    public Comment getCommentById(Long id) throws ServiceException {
         Comment comment;
         try{
             comment = commentDao.getById(id);
@@ -109,7 +109,7 @@ public class CommentServiceImpl implements CommentService {
      * @throws ServiceException if cannot get news by id
      */
     @Override
-    public Set<Comment> getCommentByNewsId(long newsId) throws ServiceException {
+    public Set<Comment> getCommentByNewsId(Long newsId) throws ServiceException {
         Set<Comment> comments;
         try{
             comments = commentDao.getByNewsId(newsId);

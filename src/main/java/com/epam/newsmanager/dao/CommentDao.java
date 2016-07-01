@@ -1,6 +1,5 @@
-package com.epam.newsmanager.dao.impl;
+package com.epam.newsmanager.dao;
 
-import com.epam.newsmanager.dao.GenericDao;
 import com.epam.newsmanager.dao.exception.DaoException;
 import com.epam.newsmanager.entity.Comment;
 
@@ -18,5 +17,5 @@ public interface CommentDao extends GenericDao<Comment> {
      * @return set of comments
      * @throws DaoException if cannot get news by id
      */
-    Set<Comment> getByNewsId(long newsId) throws DaoException;
+    Set<Comment> getByNewsId(Long newsId) throws DaoException;
 }

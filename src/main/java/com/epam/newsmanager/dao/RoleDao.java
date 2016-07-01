@@ -1,6 +1,5 @@
-package com.epam.newsmanager.dao.impl;
+package com.epam.newsmanager.dao;
 
-import com.epam.newsmanager.dao.GenericDao;
 import com.epam.newsmanager.dao.exception.DaoException;
 import com.epam.newsmanager.entity.Role;
 
@@ -16,5 +15,5 @@ public interface RoleDao extends GenericDao<Role> {
      * @return object with or null
      * @throws DaoException if cannot return user role
      */
-    //Role getByUserId(int userId) throws DaoException;
+    Role getByUserId(Long userId) throws DaoException;
 }

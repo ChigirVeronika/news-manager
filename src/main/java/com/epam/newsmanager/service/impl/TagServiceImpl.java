@@ -1,7 +1,7 @@
 package com.epam.newsmanager.service.impl;
 
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.impl.TagDaoImpl;
+import com.epam.newsmanager.dao.impl.TagDaoImpl;
 import com.epam.newsmanager.entity.Tag;
 import com.epam.newsmanager.service.TagService;
 import com.epam.newsmanager.service.exception.ServiceException;
@@ -58,7 +58,7 @@ public class TagServiceImpl implements TagService{
      * @throws ServiceException
      */
     @Override
-    public void deleteTag(long id) throws ServiceException {
+    public void deleteTag(Long id) throws ServiceException {
         try{
             tagDao.delete(id);
         } catch (DaoException e) {
@@ -91,7 +91,7 @@ public class TagServiceImpl implements TagService{
      * @throws ServiceException
      */
     @Override
-    public Tag getTagById(long id) throws ServiceException {
+    public Tag getTagById(Long id) throws ServiceException {
         Tag tag;
         try{
             tag = tagDao.getById(id);
@@ -126,7 +126,7 @@ public class TagServiceImpl implements TagService{
      * @throws ServiceException
      */
     @Override
-    public Set<Tag> getTagByNewsId(int newsId) throws ServiceException {
+    public Set<Tag> getTagByNewsId(Long newsId) throws ServiceException {
         Set<Tag> tags;
         try{
             tags = tagDao.getByNewsId(newsId);

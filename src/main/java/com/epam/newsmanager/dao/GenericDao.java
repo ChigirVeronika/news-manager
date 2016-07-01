@@ -15,7 +15,7 @@ public interface GenericDao<T> {
      * @return created object
      * @throws DaoException
      */
-    long insert(T object) throws DaoException;//returns new copy
+    Long insert(T object) throws DaoException;//returns new copy
 
     /**
      * Update object in database
@@ -29,7 +29,7 @@ public interface GenericDao<T> {
      * @param id unique identified of object to delete
      * @throws DaoException
      */
-    void delete(long id) throws DaoException;
+    void delete(Long id) throws DaoException;
 
     /**
      * Return list of all items from database
@@ -44,5 +44,5 @@ public interface GenericDao<T> {
      * @return object with primary key 'key' or null
      * @throws DaoException
      */
-    T getById(long id) throws DaoException;
+    T getById(Long id) throws DaoException;
 }

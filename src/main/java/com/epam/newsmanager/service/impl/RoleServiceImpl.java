@@ -1,7 +1,7 @@
 package com.epam.newsmanager.service.impl;
 
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.impl.RoleDaoImpl;
+import com.epam.newsmanager.dao.impl.RoleDaoImpl;
 import com.epam.newsmanager.entity.Role;
 import com.epam.newsmanager.service.RoleService;
 import com.epam.newsmanager.service.exception.ServiceException;
@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService{
      * @throws ServiceException
      */
     @Override
-    public void deleteRole(long id) throws ServiceException {
+    public void deleteRole(Long id) throws ServiceException {
         try{
             roleDao.delete(id);
         } catch (DaoException e) {
@@ -91,7 +91,7 @@ public class RoleServiceImpl implements RoleService{
      * @throws ServiceException
      */
     @Override
-    public Role getRoleById(long userId) throws ServiceException {
+    public Role getRoleById(Long userId) throws ServiceException {
         Role role;
         try{
             role = roleDao.getById(userId);

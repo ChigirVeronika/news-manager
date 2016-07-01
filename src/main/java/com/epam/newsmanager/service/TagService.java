@@ -32,7 +32,7 @@ public interface TagService {
      * @param id unique identified of object to delete
      * @throws ServiceException
      */
-    void deleteTag(long id) throws ServiceException;
+    void deleteTag(Long id) throws ServiceException;
 
     /**
      * Return list of all items
@@ -49,7 +49,7 @@ public interface TagService {
      * @return object with primary key 'key' or null
      * @throws ServiceException
      */
-    Tag getTagById(long id) throws ServiceException;
+    Tag getTagById(Long id) throws ServiceException;
 
     /**
      * Get tag by name
@@ -67,5 +67,5 @@ public interface TagService {
      * @return set of tags with corresponding news id
      * @throws ServiceException
      */
-    Set<Tag> getTagByNewsId(int newsId) throws ServiceException;
+    Set<Tag> getTagByNewsId(Long newsId) throws ServiceException;
 }

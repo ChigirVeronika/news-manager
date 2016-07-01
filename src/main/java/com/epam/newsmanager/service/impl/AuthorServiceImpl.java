@@ -1,7 +1,7 @@
 package com.epam.newsmanager.service.impl;
 
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.impl.AuthorDaoImpl;
+import com.epam.newsmanager.dao.impl.AuthorDaoImpl;
 import com.epam.newsmanager.entity.Author;
 import com.epam.newsmanager.service.AuthorService;
 import com.epam.newsmanager.service.exception.ServiceException;
@@ -16,7 +16,7 @@ public class AuthorServiceImpl implements AuthorService{
     /**
      * Dao for author dao objects
      */
-    private static AuthorDaoImpl authorDao;
+    private AuthorDaoImpl authorDao;
 
     public AuthorServiceImpl(AuthorDaoImpl authorDao){this.authorDao = authorDao; }
 
@@ -58,7 +58,7 @@ public class AuthorServiceImpl implements AuthorService{
      * @throws ServiceException
      */
     @Override
-    public void deleteAuthor(long id) throws ServiceException {
+    public void deleteAuthor(Long id) throws ServiceException {
         try{
             authorDao.delete(id);
         } catch (DaoException e) {
@@ -92,7 +92,7 @@ public class AuthorServiceImpl implements AuthorService{
      * @throws ServiceException
      */
     @Override
-    public Author getAuthorById(long id) throws ServiceException {
+    public Author getAuthorById(Long id) throws ServiceException {
         Author author;
         try{
             author = authorDao.getById(id);
@@ -110,7 +110,7 @@ public class AuthorServiceImpl implements AuthorService{
      * @throws ServiceException
      */
     @Override
-    public Set<Author> getAuthorByNewsId(long newsId) throws ServiceException {
+    public Set<Author> getAuthorByNewsId(Long newsId) throws ServiceException {
         Set<Author> authors;
         try{
             authors = authorDao.getByNewsId(newsId);

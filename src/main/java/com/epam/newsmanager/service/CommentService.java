@@ -32,7 +32,7 @@ public interface CommentService {
      * @param id unique identified of object to delete
      * @throws ServiceException
      */
-    void deleteComment(long id) throws ServiceException;
+    void deleteComment(Long id) throws ServiceException;
 
     /**
      * Return list of all items from database
@@ -49,7 +49,7 @@ public interface CommentService {
      * @return object with primary key 'key' or null
      * @throws ServiceException
      */
-    Comment getCommentById(long id) throws ServiceException;
+    Comment getCommentById(Long id) throws ServiceException;
 
     /**
      * Get comment by news id
@@ -58,5 +58,5 @@ public interface CommentService {
      * @return set of comments
      * @throws ServiceException if cannot get news by id
      */
-    Set<Comment> getCommentByNewsId(long newsId) throws ServiceException;
+    Set<Comment> getCommentByNewsId(Long newsId) throws ServiceException;
 }

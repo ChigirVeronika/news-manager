@@ -1,6 +1,5 @@
-package com.epam.newsmanager.dao.impl;
+package com.epam.newsmanager.dao;
 
-import com.epam.newsmanager.dao.GenericDao;
 import com.epam.newsmanager.entity.User;
 
 /**

@@ -1,7 +1,7 @@
 package com.epam.newsmanager.service.impl;
 
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.impl.UserDaoImpl;
+import com.epam.newsmanager.dao.impl.UserDaoImpl;
 import com.epam.newsmanager.entity.User;
 import com.epam.newsmanager.service.UserService;
 import com.epam.newsmanager.service.exception.ServiceException;
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService{
      * @throws ServiceException if cannot delete user
      */
     @Override
-    public void deleteUser(long id) throws ServiceException {
+    public void deleteUser(Long id) throws ServiceException {
         try {
             userDao.delete(id);
         } catch (DaoException e) {
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService{
      * @throws ServiceException
      */
     @Override
-    public User getUserById(long id) throws ServiceException {
+    public User getUserById(Long id) throws ServiceException {
         User user;
         try {
             user = userDao.getById(id);

@@ -1,12 +1,13 @@
-package com.epam.newsmanager.dao.impl.impl;
+package com.epam.newsmanager.dao.impl;
 
-import com.epam.newsmanager.dao.impl.CommentDao;
+import com.epam.newsmanager.dao.CommentDao;
 import com.epam.newsmanager.entity.Comment;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -16,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
-import org.testng.annotations.Test;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -60,15 +60,15 @@ public class CommentDaoImplTest {
         comment.setCreationDate(Timestamp.valueOf("2016-06-29 16:07:10"));
         comment.setCommentText("Something");
         commentsDao.update(comment);
-        Assert.assertEquals(comment, commentsDao.getById(1));
+        Assert.assertEquals(comment, commentsDao.getById(1L));
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "classpath:dataset.xml", type = DatabaseOperation.DELETE_ALL)
     @Test
     public void testDelete() throws Exception {
-        commentsDao.delete(1);
-        Assert.assertEquals(commentsDao.getById(1), null);
+        commentsDao.delete(1L);
+        Assert.assertEquals(commentsDao.getById(1L), null);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
@@ -99,7 +99,7 @@ public class CommentDaoImplTest {
         comment.setNewsId(1);
         comment.setCreationDate(Timestamp.valueOf("2016-06-29 16:07:10"));
         comment.setCommentText("Something");
-        Assert.assertEquals(comment, commentsDao.getById(1));
+        Assert.assertEquals(comment, commentsDao.getById(1L));
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
@@ -119,6 +119,6 @@ public class CommentDaoImplTest {
         comment1.setCommentText("Hello");
         comments.add(comment);
         comments.add(comment1);
-        Assert.assertEquals(comments, commentsDao.getByNewsId(1));
+        Assert.assertEquals(comments, commentsDao.getByNewsId(1L));
     }
 }

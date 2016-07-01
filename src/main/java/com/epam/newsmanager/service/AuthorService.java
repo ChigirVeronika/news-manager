@@ -33,7 +33,7 @@ public interface AuthorService {
      * @param id unique identified of object to delete
      * @throws ServiceException
      */
-    void deleteAuthor(long id) throws ServiceException;
+    void deleteAuthor(Long id) throws ServiceException;
 
     /**
      * Return list of all items from database
@@ -50,7 +50,7 @@ public interface AuthorService {
      * @return object with primary key 'key' or null
      * @throws ServiceException
      */
-    Author getAuthorById(long id) throws ServiceException;
+    Author getAuthorById(Long id) throws ServiceException;
 
     /**
      * Get set of authors by news id
@@ -59,7 +59,7 @@ public interface AuthorService {
      * @return set of authors with corresponding news identifier
      * @throws ServiceException
      */
-    Set<Author> getAuthorByNewsId(long newsId) throws ServiceException;
+    Set<Author> getAuthorByNewsId(Long newsId) throws ServiceException;
 
     /**
      * Get author by his name

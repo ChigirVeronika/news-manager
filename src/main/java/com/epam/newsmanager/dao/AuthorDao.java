@@ -1,6 +1,5 @@
-package com.epam.newsmanager.dao.impl;
+package com.epam.newsmanager.dao;
 
-import com.epam.newsmanager.dao.GenericDao;
 import com.epam.newsmanager.dao.exception.DaoException;
 import com.epam.newsmanager.entity.Author;
 
@@ -18,7 +17,7 @@ public interface AuthorDao extends GenericDao<Author> {
      * @return set of authors with corresponding news identifier
      * @throws DaoException
      */
-    Set<Author> getByNewsId(long newsId) throws DaoException;
+    Set<Author> getByNewsId(Long newsId) throws DaoException;
 
     /**
      * Get author by his name

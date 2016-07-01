@@ -1,6 +1,5 @@
-package com.epam.newsmanager.dao.impl;
+package com.epam.newsmanager.dao;
 
-import com.epam.newsmanager.dao.GenericDao;
 import com.epam.newsmanager.dao.exception.DaoException;
 import com.epam.newsmanager.entity.Author;
 import com.epam.newsmanager.entity.News;
@@ -38,7 +37,7 @@ public interface NewsDao extends GenericDao<News> {
      * @param authors set of authors
      * @throws DaoException if cannot insert
      */
-    void insertNewsAuthors(long newsId, Set<Author> authors) throws DaoException;
+    void insertNewsAuthors(Long newsId, Set<Author> authors) throws DaoException;
 
     /**
      * Insert set of tags according with news
@@ -47,7 +46,7 @@ public interface NewsDao extends GenericDao<News> {
      * @param tags set of tags
      * @throws DaoException if cannot insert
      */
-    void insertNewsTags(long newsId, Set<Tag> tags) throws DaoException;
+    void insertNewsTags(Long newsId, Set<Tag> tags) throws DaoException;
 
     /**
      * Get most commented news

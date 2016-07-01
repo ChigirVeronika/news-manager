@@ -1,12 +1,13 @@
-package com.epam.newsmanager.dao.impl.impl;
+package com.epam.newsmanager.dao.impl;
 
-import com.epam.newsmanager.dao.impl.AuthorDao;
+import com.epam.newsmanager.dao.AuthorDao;
 import com.epam.newsmanager.entity.Author;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -16,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
-import org.testng.annotations.Test;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -54,15 +54,15 @@ public class AuthorDaoImplTest {
         author.setAuthorId(1);
         author.setAuthorName("Test");
         authorDao.update(author);
-        Assert.assertEquals(authorDao.getById(1), author);
+        Assert.assertEquals(authorDao.getById(1L), author);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "classpath:dataset.xml", type = DatabaseOperation.DELETE_ALL)
     @Test
     public void testDelete() throws Exception {
-        authorDao.delete(1);
-        Assert.assertEquals(authorDao.getById(1), null);
+        authorDao.delete(1L);
+        Assert.assertEquals(authorDao.getById(1L), null);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
@@ -88,7 +88,7 @@ public class AuthorDaoImplTest {
         Author author = new Author();
         author.setAuthorId(1);
         author.setAuthorName("John Smith");//jane roe
-        Assert.assertEquals(authorDao.getById(1), author);
+        Assert.assertEquals(authorDao.getById(1L), author);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
@@ -108,7 +108,7 @@ public class AuthorDaoImplTest {
         authors.add(author);
         authors.add(author1);
 
-        Assert.assertEquals(authors, authorDao.getByNewsId(1));
+        Assert.assertEquals(authors, authorDao.getByNewsId(1L));
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)

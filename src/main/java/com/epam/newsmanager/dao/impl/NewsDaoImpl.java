@@ -1,7 +1,7 @@
-package com.epam.newsmanager.dao.impl.impl;
+package com.epam.newsmanager.dao.impl;
 
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.NewsDao;
+import com.epam.newsmanager.dao.NewsDao;
 import com.epam.newsmanager.entity.Author;
 import com.epam.newsmanager.entity.News;
 import com.epam.newsmanager.entity.Tag;
@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.epam.newsmanager.dao.name.ParameterName.*;
 
 /**
  * Dao implementation for Oracle database and News entity.
@@ -33,7 +31,17 @@ public class NewsDaoImpl implements NewsDao {
     private static final String DELETE_NEWS = "DELETE FROM NEWS WHERE NEWS_ID = ?";
     private static final String GET_NEWS_BY_ID = "SELECT * FROM NEWS WHERE NEWS_ID = ?";
     private static final String GET_MOST_COMMENTED = "select news_id, count(*) c from admin.comments group by NEWS_ID order by c desc";
-    
+    private StringBuilder searchQuery = new StringBuilder("SELECT n.NEWS_ID, TITLE, SHORT_TEXT, FULL_TEXT, CREATION_DATE," +
+            "  MODIFICATION_DATE, na.AUTHOR_ID, nt.tag_id " +
+            "  FROM NEWS n inner join NEWS_AUTHOR na on na.NEWS_ID = n.NEWS_ID " +
+            "inner join news_tag nt on n.news_id = nt.news_id ");
+
+    private static final String NEWS_ID = "NEWS_ID";
+    private static final String TITLE = "TITLE";
+    private static final String SHORT_TEXT = "SHORT_TEXT";
+    private static final String FULL_TEXT = "FULL_TEXT";
+    private static final String MODIFICATION_DATE = "MODIFICATION_DATE";
+    private static final String CREATION_DATE = "CREATION_DATE";
 
     private static final Logger LOGGER = Logger.getLogger(NewsDaoImpl.class);
 
@@ -52,9 +60,9 @@ public class NewsDaoImpl implements NewsDao {
      * @throws DaoException
      */
     @Override
-    public long insert(News object) throws DaoException {
+    public Long insert(News object) throws DaoException {
         Connection connection = null;
-        int id = 0;
+        Long id = new Long(0);
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSourceUtils.getConnection(dataSource);
@@ -67,7 +75,7 @@ public class NewsDaoImpl implements NewsDao {
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
-                id = resultSet.getInt(1);
+                id = resultSet.getLong(1);
                 object.setNewsId(id);
             }
         } catch (SQLException e) {
@@ -122,7 +130,7 @@ public class NewsDaoImpl implements NewsDao {
      * @throws DaoException
      */
     @Override
-    public void delete(long id) throws DaoException {
+    public void delete(Long id) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -183,7 +191,7 @@ public class NewsDaoImpl implements NewsDao {
      * @throws DaoException
      */
     @Override
-    public News getById(long id) throws DaoException {
+    public News getById(Long id) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         News news = new News();
@@ -222,13 +230,11 @@ public class NewsDaoImpl implements NewsDao {
         Connection connection = null;
         Statement statement = null;
         Set<News> newsSet = new HashSet<News>();
-
-        //// TODO: 6/30/2016  
-
+        configQuery(searchNews);
         try {
             connection = dataSourceUtils.getConnection(dataSource);
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("");
+            ResultSet resultSet = statement.executeQuery(searchQuery.toString());
             while (resultSet.next()) {
                 News news = new News();
                 parseResultSet(resultSet, news);
@@ -245,6 +251,28 @@ public class NewsDaoImpl implements NewsDao {
             }
         }
         return newsSet;
+    }
+
+    private void configQuery(SearchNewsDto searchNews){
+        if (searchNews.getAuthor() == null) {
+            searchQuery.append("where tag_id in (");
+            for (Tag tag : searchNews.getTags()) {
+                searchQuery.append(tag.getTagId() + ", ");
+            }
+            searchQuery.deleteCharAt(searchQuery.length() - 2);
+            searchQuery.append(")");
+        } else {
+            if (searchNews.getTags() == null || searchNews.getTags().isEmpty()) {
+                searchQuery.append("where author_id = " + searchNews.getAuthor().getAuthorId());
+            } else {
+                searchQuery.append("where tag_id in (");
+                for (Tag tag : searchNews.getTags()) {
+                    searchQuery.append(tag.getTagId() + ", ");
+                }
+                searchQuery.deleteCharAt(searchQuery.length() - 2);
+                searchQuery.append(") and author_id = " + searchNews.getAuthor().getAuthorId());
+            }
+        }
     }
 
     /**
@@ -286,7 +314,7 @@ public class NewsDaoImpl implements NewsDao {
      * @throws DaoException if cannot insert
      */
     @Override
-    public void insertNewsAuthors(long newsId, Set<Author> authors) throws DaoException {
+    public void insertNewsAuthors(Long newsId, Set<Author> authors) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -318,7 +346,7 @@ public class NewsDaoImpl implements NewsDao {
      * @throws DaoException if cannot insert
      */
     @Override
-    public void insertNewsTags(long newsId, Set<Tag> tags) throws DaoException {
+    public void insertNewsTags(Long newsId, Set<Tag> tags) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -357,15 +385,14 @@ public class NewsDaoImpl implements NewsDao {
             connection = dataSourceUtils.getConnection(dataSource);
             preparedStatement = connection.prepareStatement(GET_MOST_COMMENTED);
             ResultSet resultSet = preparedStatement.executeQuery();
-            List<Integer> newsId = new ArrayList<Integer>();
+            List<Long> newsId = new ArrayList<>();
             while (resultSet.next()) {
-                newsId.add(resultSet.getInt(NEWS_ID));
+                newsId.add(resultSet.getLong(NEWS_ID));
             }
             newsList = getListById(newsId);
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
-            //todo WHY STATIC, NOT AN OBJECT???
             DataSourceUtils.releaseConnection(connection, dataSource);
             try {
                 preparedStatement.close();
@@ -376,9 +403,9 @@ public class NewsDaoImpl implements NewsDao {
         return newsList;
     }
 
-    private ArrayList<News> getListById(List<Integer> newsId) throws DaoException {
+    private ArrayList<News> getListById(List<Long> newsId) throws DaoException {
         ArrayList<News> newsList = new ArrayList<News>();
-        for (Integer id : newsId) {
+        for (Long id : newsId) {
             newsList.add(getById(id));
         }
         return newsList;

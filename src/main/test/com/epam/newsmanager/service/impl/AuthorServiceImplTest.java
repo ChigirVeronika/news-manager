@@ -1,19 +1,22 @@
 package com.epam.newsmanager.service.impl;
 
-import com.epam.newsmanager.dao.impl.AuthorDao;
+import com.epam.newsmanager.dao.impl.AuthorDaoImpl;
 import com.epam.newsmanager.entity.Author;
 import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -26,7 +29,7 @@ public class AuthorServiceImplTest {
     private AuthorServiceImpl authorService;
 
     @Mock
-    private AuthorDao authorDao;
+    private AuthorDaoImpl authorDao;
 
     @BeforeMethod
     public void initMocks(){
@@ -43,13 +46,14 @@ public class AuthorServiceImplTest {
     }
 
     @Test
-    public void testUpdateAuthor() throws Exception {
-
-    }
-
-    @Test
     public void testDeleteAuthor() throws Exception {
+        Author author = new Author();
+        when(authorService.getAuthorById(1L)).thenReturn(author);
 
+        authorService.insertAuthor(author);
+        authorService.deleteAuthor(1L);
+        verify(authorDao, times(1)).insert(any(Author.class));
+        verify(authorDao, times(1)).delete(any(Long.class));
     }
 
     @Test
@@ -65,8 +69,8 @@ public class AuthorServiceImplTest {
     public void testGetAuthorById() throws Exception {
         Author author = new Author();
         author.setAuthorId(1);
-        when(authorDao.getById(1)).thenReturn(author);
-        Author newAuthor = authorService.getAuthorById(1);
+        when(authorDao.getById(1l)).thenReturn(author);
+        Author newAuthor = authorService.getAuthorById(1l);
         Assert.assertEquals(author, newAuthor);
     }
 
@@ -74,8 +78,8 @@ public class AuthorServiceImplTest {
     public void testGetAuthorByNewsId() throws Exception {
         Set<Author> authors = new HashSet<Author>();
         authors.add(new Author());
-        when(authorDao.getByNewsId(1)).thenReturn(authors);
-        Set<Author> newAuthors = authorDao.getByNewsId(1);
+        when(authorDao.getByNewsId(1L)).thenReturn(authors);
+        Set<Author> newAuthors = authorDao.getByNewsId(1L);
         Assert.assertEquals(authors, newAuthors);
     }
 

@@ -1,8 +1,8 @@
-package com.epam.newsmanager.dao.impl.impl;
+package com.epam.newsmanager.dao.impl;
 
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.UserDao;
-import com.epam.newsmanager.entity.User;
+import com.epam.newsmanager.dao.RoleDao;
+import com.epam.newsmanager.entity.Role;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -14,26 +14,28 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.epam.newsmanager.dao.name.ParameterName.*;
-
 /**
- * Dao implementation for Oracle database USERS user and User entity.
+ * Dao implementation for Oracle database and Role entity.
  */
-public class UserDaoImpl implements UserDao {
+public class RoleDaoImpl implements RoleDao {
 
-    private static final String INSERT_USER = "insert into users (USER_NAME, LOGIN, PASSWORD) values (?,?,?)";
-    private static final String UPDATE_USER = "update users set USER_NAME = ?, LOGIN = ?, PASSWORD = ? where user_id = ?";
-    private static final String DELETE_USER = "delete from users where user_id = ?";
-    private static final String GET_USER_BY_ID = "select * from users where user_id = ?";
-    private static final String GET_ALL = "select * from users";
+    private static final String INSERT_ROLE = "INSERT INTO ROLES (USER_ID, ROLE_NAME) VALUES (?,?)";
+    private static final String UPDATE_ROLE = "UPDATE ROLES SET USER_ID = ?, ROLE_NAME = ?";
+    private static final String DELETE_ROLE = "DELETE FROM ROLES WHERE USER_ID = ?";
+    private static final String GET_BY_USER_ID = "SELECT * FROM ROLES WHERE USER_ID  = ?";
+    private static final String GET_ALL = "SELECT * FROM ROLES";
 
-    private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class);
+    private static final String USER_ID = "USER_ID";
+    private static final String ROLE_NAME = "ROLE_NAME";
 
-    // TODO: 6/23/2016
-    // private ResourceBundle dbBundle = ResourceBundle.getBundle(BUNDLE);
+    private static final Logger LOGGER = Logger.getLogger(RoleDaoImpl.class);
 
     private BasicDataSource dataSource;
     private DataSourceUtils dataSourceUtils;
+
+    public void setDataSource(BasicDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     /**
      * Create new record from object
@@ -42,17 +44,16 @@ public class UserDaoImpl implements UserDao {
      * @return created object
      * @throws DaoException
      */
-    public long insert(User object) throws DaoException {
+    @Override
+    public Long insert(Role object) throws DaoException {
         long id = 0;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(INSERT_USER);
-
-            preparedStatement.setString(1, object.getUserName());
-            preparedStatement.setString(2, object.getLogin());
-            preparedStatement.setString(3, object.getPassword());
+            preparedStatement = connection.prepareStatement(INSERT_ROLE);
+            preparedStatement.setLong(1, object.getUserId());
+            preparedStatement.setString(2, object.getRoleName());
             preparedStatement.executeUpdate();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -79,17 +80,15 @@ public class UserDaoImpl implements UserDao {
      * @param object to update
      * @throws DaoException
      */
-    public void update(User object) throws DaoException {
+    @Override
+    public void update(Role object) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(UPDATE_USER);
-
-            preparedStatement.setString(1, object.getUserName());
-            preparedStatement.setString(2, object.getLogin());
-            preparedStatement.setString(3, object.getPassword());
-            preparedStatement.setLong(4, object.getUserId());
+            preparedStatement = connection.prepareStatement(UPDATE_ROLE);
+            preparedStatement.setLong(1, object.getUserId());
+            preparedStatement.setString(2, object.getRoleName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -109,16 +108,15 @@ public class UserDaoImpl implements UserDao {
      * @param id unique identified of object to delete
      * @throws DaoException
      */
-    public void delete(long id) throws DaoException {
+    @Override
+    public void delete(Long id) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(DELETE_USER);
-
-            preparedStatement.setLong(1, id);
+            preparedStatement = connection.prepareStatement(DELETE_ROLE);
+            preparedStatement.setLong( 1, id);
             preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
@@ -137,19 +135,19 @@ public class UserDaoImpl implements UserDao {
      * @return list of all items
      * @throws DaoException
      */
-    public Set<User> getAll() throws DaoException {
+    @Override
+    public Set<Role> getAll() throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        Set<User> users = new HashSet<User>();
+        Set<Role> roles = new HashSet<Role>();
         try {
             connection = dataSourceUtils.getConnection(dataSource);
             preparedStatement = connection.prepareStatement(GET_ALL);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             while (resultSet.next()) {
-                User user = new User();
-                parseResultSet(resultSet, user);
-                users.add(user);
+                Role role = new Role();
+                parseResultSet(resultSet, role);
+                roles.add(role);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -161,27 +159,66 @@ public class UserDaoImpl implements UserDao {
                 LOGGER.error(e);
             }
         }
-        return users;
+        return roles;
+    }
+
+    /**
+     * Return object role by user id or null
+     *
+     * @param userId user id of role object
+     * @return object with or null
+     * @throws DaoException if cannot return user role
+     */
+    @Override
+    public Role getById(Long userId) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        Role role = new Role();
+        try {
+            connection = dataSourceUtils.getConnection(dataSource);
+            preparedStatement = connection.prepareStatement(GET_BY_USER_ID);
+            preparedStatement.setLong(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                parseResultSet(resultSet, role);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                LOGGER.error(e);
+            }
+        }
+        return role;
+    }
+
+    private void parseResultSet(ResultSet resultSet, Role role) throws SQLException {
+        role.setUserId(resultSet.getLong(USER_ID));
+        role.setRoleName(resultSet.getString(ROLE_NAME));
     }
 
     /**
      * Return object with primary key 'key' or null
      *
-     * @param id primary key of object
-     * @return object with primary key 'key' or null
-     * @throws DaoException
+     * @param userId primary key of user object
+     * @return object with or null
+     * @throws DaoException if cannot return user role
      */
-    public User getById(long id) throws DaoException {
+    @Override
+    public Role getByUserId(Long userId) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        User user = new User();
+        Role role = new Role();
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(GET_USER_BY_ID);
+            preparedStatement = connection.prepareStatement(GET_BY_USER_ID);
+            preparedStatement.setLong(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             if (resultSet.next()) {
-                parseResultSet(resultSet, user);
+                parseResultSet(resultSet, role);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -193,21 +230,6 @@ public class UserDaoImpl implements UserDao {
                 LOGGER.error(e);
             }
         }
-        return user;
-    }
-
-    private void parseResultSet(ResultSet resultSet, User user) throws SQLException {
-        user.setUserId(resultSet.getLong(USER_ID));
-        user.setUserName(resultSet.getString(USER_NAME));
-        user.setLogin(resultSet.getString(LOGIN));
-        user.setPassword(resultSet.getString(PASSWORD));
-    }
-
-    public void setDataSource(BasicDataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    public BasicDataSource getDataSource() {
-        return dataSource;
+        return role;
     }
 }

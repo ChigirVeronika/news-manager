@@ -1,8 +1,8 @@
-package com.epam.newsmanager.dao.impl.impl;
+package com.epam.newsmanager.dao.impl;
 
-import com.epam.newsmanager.dao.impl.AuthorDao;
-import com.epam.newsmanager.dao.impl.NewsDao;
-import com.epam.newsmanager.dao.impl.TagDao;
+import com.epam.newsmanager.dao.AuthorDao;
+import com.epam.newsmanager.dao.NewsDao;
+import com.epam.newsmanager.dao.TagDao;
 import com.epam.newsmanager.entity.Author;
 import com.epam.newsmanager.entity.News;
 import com.epam.newsmanager.entity.Tag;
@@ -12,6 +12,7 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -21,7 +22,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
-import org.testng.annotations.Test;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -75,15 +75,15 @@ public class NewsDaoImplTest {
         news.setCreationDate(new Timestamp(new Date().getTime()));
         news.setModificationDate(new java.sql.Date(new Date().getTime()));
         newsDao.update(news);
-        Assert.assertEquals(newsDao.getById(1), news);
+        Assert.assertEquals(newsDao.getById(1L), news);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "classpath:dataset.xml", type = DatabaseOperation.DELETE_ALL)
     @Test
     public void testDelete() throws Exception {
-        newsDao.delete(1);
-        Assert.assertEquals(newsDao.getById(1), null);
+        newsDao.delete(1L);
+        Assert.assertEquals(newsDao.getById(1L), null);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
@@ -118,7 +118,7 @@ public class NewsDaoImplTest {
         news.setFullText("Full text");
         news.setCreationDate(Timestamp.valueOf("1996-06-20 20:15:11"));
         news.setModificationDate(new java.sql.Date(Timestamp.valueOf("1996-06-20 20:15:11").getTime()));
-        Assert.assertEquals(newsDao.getById(1), news);
+        Assert.assertEquals(newsDao.getById(1L), news);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
@@ -165,8 +165,8 @@ public class NewsDaoImplTest {
         author.setAuthorId(3);
         author.setAuthorName("Kto-to");
         authors.add(author);
-        newsDao.insertNewsAuthors(1,authors);
-        assertThat(authorDao.getByNewsId(1)).contains(author);
+        newsDao.insertNewsAuthors(1L,authors);
+        assertThat(authorDao.getByNewsId(1L)).contains(author);
     }
 
     @Transactional
@@ -180,8 +180,8 @@ public class NewsDaoImplTest {
         tag.setTagId(3);
         tag.setTagName("Russia");
         tags.add(tag);
-        newsDao.insertNewsTags(1, tags);
-        assertThat(tagDao.getByNewsId(1)).contains(tag);
+        newsDao.insertNewsTags(1L, tags);
+        assertThat(tagDao.getByNewsId(1L)).contains(tag);
     }
 
     @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)

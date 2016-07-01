@@ -1,7 +1,7 @@
-package com.epam.newsmanager.dao.impl.impl;
+package com.epam.newsmanager.dao.impl;
 
+import com.epam.newsmanager.dao.AuthorDao;
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.AuthorDao;
 import com.epam.newsmanager.entity.Author;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.epam.newsmanager.dao.name.ParameterName.*;
 
 /**
  * Dao implementation for Oracle database and Author entity.
@@ -31,6 +30,10 @@ public class AuthorDaoImpl implements AuthorDao {
     private final static String GET_AUTHOR_BY_NAME = "SELECT * FROM AUTHORS WHERE AUTHOR_NAME = ?";
     private final static String GET_AUTHOR_BY_NEWS_ID = "SELECT NEWS_ID, a.AUTHOR_ID, AUTHOR_NAME, EXPIRED " +
             "FROM NEWS_AUTHORS na INNER JOIN AUTHORS a ON na.AUTHOR_ID = a.author_id WHERE na.NEWS_ID = ?";
+
+    private static final String AUTHOR_ID = "AUTHOR_ID";
+    private static final String AUTHOR_NAME = "AUTHOR_NAME";
+    private static final String EXPIRED = "EXPIRED";
 
     private static final Logger LOGGER = Logger.getLogger(AuthorDaoImpl.class);
 
@@ -49,8 +52,8 @@ public class AuthorDaoImpl implements AuthorDao {
      * @throws DaoException
      */
     @Override
-    public long insert(Author object) throws DaoException {
-        long id = 0;
+    public Long insert(Author object) throws DaoException {
+        Long id = new Long(0);
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -116,7 +119,7 @@ public class AuthorDaoImpl implements AuthorDao {
      * @throws DaoException
      */
     @Override
-    public void delete(long id) throws DaoException {
+    public void delete(Long id) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -180,7 +183,7 @@ public class AuthorDaoImpl implements AuthorDao {
      * @throws DaoException
      */
     @Override
-    public Author getById(long id) throws DaoException {
+    public Author getById(Long id) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -219,7 +222,7 @@ public class AuthorDaoImpl implements AuthorDao {
      * @throws DaoException
      */
     @Override
-    public Set<Author> getByNewsId(long newsId) throws DaoException {
+    public Set<Author> getByNewsId(Long newsId) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         Set<Author> authors = new HashSet<Author>();

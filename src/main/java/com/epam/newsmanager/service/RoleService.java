@@ -32,7 +32,7 @@ public interface RoleService {
      * @param id unique identified of object to delete
      * @throws ServiceException
      */
-    void deleteRole(long id) throws ServiceException;
+    void deleteRole(Long id) throws ServiceException;
 
     /**
      * Return list of all items
@@ -49,5 +49,5 @@ public interface RoleService {
      * @return object with primary key 'key' or null
      * @throws ServiceException
      */
-    Role getRoleById(long id) throws ServiceException;
+    Role getRoleById(Long id) throws ServiceException;
 }

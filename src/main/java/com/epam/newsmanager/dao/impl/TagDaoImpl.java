@@ -1,8 +1,8 @@
-package com.epam.newsmanager.dao.impl.impl;
+package com.epam.newsmanager.dao.impl;
 
+import com.epam.newsmanager.dao.TagDao;
 import com.epam.newsmanager.dao.exception.DaoException;
-import com.epam.newsmanager.dao.impl.CommentDao;
-import com.epam.newsmanager.entity.Comment;
+import com.epam.newsmanager.entity.Tag;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -13,21 +13,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-import static com.epam.newsmanager.dao.name.ParameterName.*;
 
 /**
- * Dao implementation for Oracle database and Comment entity.
+ * Dao implementation for Oracle database and Tag entity.
  */
-public class CommentDaoImpl implements CommentDao {
+public class TagDaoImpl implements TagDao {
 
-        private static final String INSERT_COMMENT = "INSERT INTO COMMENTS (NEWS_ID, COMMENT_TEXT, CREATION_DATE) VALUES (?, ?, ?)";
-    private static final String UPDATE_COMMENT = "UPDATE COMMENTS SET COMMENT_TEXT = ?";
-    private static final String DELETE_COMMENT = "DELETE FROM COMMENTS WHERE COMMENT_ID = ?";
-    private static final String GET_BY_ID = "SELECT * FROM COMMENTS WHERE COMMENT_ID = ?";
-    private static final String GET_BY_NEWS_ID = "SELECT * FROM COMMENTS WHERE NEWS_ID = ?";
-    private static final String GET_ALL = "SELECT * FROM COMMENTS";
+    private static final String GET_TAG_BY_NEWS_ID = "SELECT NEWS_ID, t.TAG_ID, TAG_NAME FROM " +
+            "NEWS_TAGS nt INNER JOIN TAGS t on nt.TAG_ID = t.tag_id WHERE nt.NEWS_ID = ?";
+    private static final String INSERT_TAG = "INSERT INTO TAGS (TAG_NAME) VALUES (?)";
+    private static final String UPDATE_TAG = "UPDATE TAGS SET TAG_NAME = ? where TAG_ID = ?";
+    private static final String DELETE_TAG = "DELETE FROM TAGS WHERE TAG_ID = ?";
+    private static final String GET_TAG_BY_ID = "SELECT * FROM TAGS WHERE TAG_ID = ?";
+    private static final String GET_TAG_BY_NAME = "SELECT * FROM TAGS WHERE TAG_NAME = ?";
+    private static final String GET_ALL = "SELECT * FROM TAGS";
 
-    private static final Logger LOGGER = Logger.getLogger(CommentDaoImpl.class);
+    private static final String TAG_ID = "TAG_ID";
+    private static final String TAG_NAME = "TAG_NAME";
+
+    private static final Logger LOGGER = Logger.getLogger(TagDaoImpl.class);
 
     private BasicDataSource dataSource;
     private DataSourceUtils dataSourceUtils;
@@ -35,6 +39,7 @@ public class CommentDaoImpl implements CommentDao {
     public void setDataSource(BasicDataSource dataSource) {
         this.dataSource = dataSource;
     }
+
     /**
      * Create new record from object
      *
@@ -43,23 +48,20 @@ public class CommentDaoImpl implements CommentDao {
      * @throws DaoException
      */
     @Override
-    public long insert(Comment object) throws DaoException {
-        long id = 0;
+    public Long insert(Tag object) throws DaoException {
         Connection connection = null;
+        long id = 0;
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(INSERT_COMMENT);
-
-            preparedStatement.setLong(1, object.getNewsId());
-            preparedStatement.setString(2, object.getCommentText());
-            preparedStatement.setTimestamp(3, object.getCreationDate());
+            preparedStatement = connection.prepareStatement(INSERT_TAG);
+            preparedStatement.setString(1, object.getTagName());
             preparedStatement.executeUpdate();
-
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            if (resultSet.next()) {
+            if (resultSet.next())
+            {
                 id = resultSet.getLong(1);
-                object.setCommentId(id);
+                object.setTagId(id);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -81,14 +83,13 @@ public class CommentDaoImpl implements CommentDao {
      * @throws DaoException
      */
     @Override
-    public void update(Comment object) throws DaoException {
+    public void update(Tag object) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(UPDATE_COMMENT);
-
-            preparedStatement.setString(1, object.getCommentText());
+            preparedStatement = connection.prepareStatement(UPDATE_TAG);
+            preparedStatement.setString(1, object.getTagName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -109,16 +110,14 @@ public class CommentDaoImpl implements CommentDao {
      * @throws DaoException
      */
     @Override
-    public void delete(long id) throws DaoException {
+    public void delete(Long id) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(DELETE_COMMENT);
-
+            preparedStatement = connection.prepareStatement(DELETE_TAG);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
@@ -138,19 +137,19 @@ public class CommentDaoImpl implements CommentDao {
      * @throws DaoException
      */
     @Override
-    public Set<Comment> getAll() throws DaoException {
+    public Set<Tag> getAll() throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        Set<Comment> comments = new HashSet<Comment>();
+        Set<Tag> tags = new HashSet<>();
         try {
             connection = dataSourceUtils.getConnection(dataSource);
             preparedStatement = connection.prepareStatement(GET_ALL);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Comment comment = new Comment();
-                parseResultSet(resultSet, comment);
-                comments.add(comment);
+                Tag tag = new Tag();
+                parseResultSet(resultSet, tag);
+                tags.add(tag);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -162,7 +161,7 @@ public class CommentDaoImpl implements CommentDao {
                 LOGGER.error(e);
             }
         }
-        return comments;
+        return tags;
     }
 
     /**
@@ -173,17 +172,17 @@ public class CommentDaoImpl implements CommentDao {
      * @throws DaoException
      */
     @Override
-    public Comment getById(long id) throws DaoException {
+    public Tag getById(Long id) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        Comment comment = new Comment();
+        Tag tag = new Tag();
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(GET_BY_ID);
+            preparedStatement = connection.prepareStatement(GET_TAG_BY_ID);
+            preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             if (resultSet.next()) {
-                parseResultSet(resultSet, comment);
+                parseResultSet(resultSet, tag);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -195,30 +194,65 @@ public class CommentDaoImpl implements CommentDao {
                 LOGGER.error(e);
             }
         }
-        return comment;
+        return tag;
+    }
+
+
+    /**
+     * Get tag by name
+     *
+     * @param tag tag object
+     * @return tag object
+     * @throws DaoException if cannot get tag with corresponding name
+     */
+    @Override
+    public Tag getByName(Tag tag) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = dataSourceUtils.getConnection(dataSource);
+            preparedStatement = connection.prepareStatement(GET_TAG_BY_NAME);
+            preparedStatement.setString(1, tag.getTagName());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                parseResultSet(resultSet, tag);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                LOGGER.error(e);
+            }
+        }
+        return tag;
     }
 
     /**
-     * Get comment by news id
+     * Get set of tags with corresponding news id
      *
-     * @param newsId news unique identifier
-     * @return set of comments
-     * @throws DaoException if cannot get news by id
+     * @param newsId id of news
+     * @return set of tags with corresponding news id
+     * @throws DaoException
      */
     @Override
-    public Set<Comment> getByNewsId(long newsId) throws DaoException {
+    public Set<Tag> getByNewsId(Long newsId) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        Set<Comment> comments = new HashSet<Comment>();
+        Set<Tag> tags = new HashSet<Tag>();
         try {
             connection = dataSourceUtils.getConnection(dataSource);
-            preparedStatement = connection.prepareStatement(GET_BY_NEWS_ID);
+            preparedStatement = connection.prepareStatement(GET_TAG_BY_NEWS_ID);
             preparedStatement.setLong(1, newsId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Comment comment = new Comment();
-                parseResultSet(resultSet, comment);
-                comments.add(comment);
+                Tag tag = new Tag();
+                parseResultSet(resultSet, tag);
+                tags.add(tag);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -230,13 +264,11 @@ public class CommentDaoImpl implements CommentDao {
                 LOGGER.error(e);
             }
         }
-        return comments;
+        return tags;
     }
 
-    private void parseResultSet(ResultSet resultSet, Comment comment) throws SQLException {
-       comment.setCommentId(resultSet.getLong(COMMENT_ID));
-       comment.setNewsId(resultSet.getLong(NEWS_ID));
-       comment.setCommentText(resultSet.getString(COMMENT_TEXT));
-       comment.setCreationDate(resultSet.getTimestamp(CREATION_DATE));
+    private void parseResultSet(ResultSet resultSet, Tag tag) throws SQLException {
+        tag.setTagId(resultSet.getLong(TAG_ID));
+        tag.setTagName(resultSet.getString(TAG_NAME));
     }
 }

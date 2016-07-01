@@ -33,7 +33,7 @@ public interface UserService {
      * @param id user unique identifier
      * @throws ServiceException if cannot delete user
      */
-    void deleteUser(long id) throws ServiceException;
+    void deleteUser(Long id) throws ServiceException;
 
     /**
      * Get user by id
@@ -42,7 +42,7 @@ public interface UserService {
      * @return user
      * @throws ServiceException
      */
-    User getUserById(long id) throws ServiceException;
+    User getUserById(Long id) throws ServiceException;
 
     /**
      * Get all users from data source
