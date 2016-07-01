@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Test class with Mockito Framework for AuthorServiceImpl class.
+ * Test class with Mockito Framework for <cod>AuthorServiceImpl</cod> class.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class AuthorServiceImplTest {
@@ -39,8 +39,8 @@ public class AuthorServiceImplTest {
     @Test
     public void testInsertAuthor() throws Exception {
         Author author = new Author();
-        author.setAuthorId(1);
-        when(authorDao.insert(author)).thenReturn(Long.valueOf(1));
+        author.setAuthorId(1L);
+        when(authorDao.insert(author)).thenReturn(1L);
         authorService.insertAuthor(author);
         Assert.assertEquals(1, author.getAuthorId());
     }
@@ -48,6 +48,7 @@ public class AuthorServiceImplTest {
     @Test
     public void testDeleteAuthor() throws Exception {
         Author author = new Author();
+        author.setAuthorId(1L);
         when(authorService.getAuthorById(1L)).thenReturn(author);
 
         authorService.insertAuthor(author);
@@ -61,6 +62,7 @@ public class AuthorServiceImplTest {
         Set<Author> authors = new HashSet<Author>();
         authors.add(new Author());
         when(authorDao.getAll()).thenReturn(authors);
+
         Set<Author> newAuthors = authorDao.getAll();
         Assert.assertEquals(authors, newAuthors);
     }
@@ -86,7 +88,7 @@ public class AuthorServiceImplTest {
     @Test
     public void testGetAuthorByName() throws Exception {
         Author author = new Author();
-        author.setAuthorName("Alina");
+        author.setAuthorName("Veronika");
         when(authorDao.getByName(author)).thenReturn(author);
         Author newAuthor = authorService.getAuthorByName(author);
         Assert.assertEquals(author, newAuthor);
