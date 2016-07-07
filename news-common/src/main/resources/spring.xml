@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+        <property name="username" value="NEWSMANAGER"/>
+        <property name="password" value="4891"/>
+    </bean>
+
+    <bean id="authorDao" class="com.epam.newsmanager.dao.impl.AuthorDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="commentDao" class="com.epam.newsmanager.dao.impl.CommentDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="newsDao" class="com.epam.newsmanager.dao.impl.NewsDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="roleDao" class="com.epam.newsmanager.dao.impl.RoleDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="tagDao" class="com.epam.newsmanager.dao.impl.TagDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="userDao" class="com.epam.newsmanager.dao.impl.UserDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+    <bean id="authorService" class="com.epam.newsmanager.service.impl.AuthorServiceImpl">
+        <constructor-arg ref="authorDao"/>
+    </bean>
+
+    <bean id="commentService" class="com.epam.newsmanager.service.impl.CommentServiceImpl">
+        <constructor-arg ref="commentDao"/>
+    </bean>
+
+    <bean id="newsService" class="com.epam.newsmanager.service.impl.NewsServiceImpl">
+        <constructor-arg ref="newsDao"/>
+        <constructor-arg ref="tagDao"/>
+        <constructor-arg ref="authorDao"/>
+    </bean>
+
+    <bean id="roleService" class="com.epam.newsmanager.service.impl.RoleServiceImpl">
+        <constructor-arg ref="roleDao"/>
+    </bean>
+
+    <bean id="tagService" class="com.epam.newsmanager.service.impl.TagServiceImpl">
+        <constructor-arg ref="tagDao"/>
+    </bean>
+
+    <bean id="userService" class="com.epam.newsmanager.service.impl.UserServiceImpl">
+        <constructor-arg ref="userDao"/>
+    </bean>
+
+
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>
