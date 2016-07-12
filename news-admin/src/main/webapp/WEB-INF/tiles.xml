@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+    <definition name="defaultTemplate" template="/src/main/webapp/WEB-INF/jsp/templates/main-template.jsp">
+        <put-attribute name="title" value="page.title.news.portal"/>
+        <put-attribute name="header" value="/src/main/webapp/WEB-INF/jsp/parts/header.jsp" />
+        <put-attribute name="menu" value="/src/main/webapp/WEB-INF/jsp/parts/menu.jsp" />
+        <put-attribute name="body" value="" />
+        <put-attribute name="footer" value="/src/main/webapp/WEB-INF/jsp/parts/footer.jsp" />
+    </definition>
+
+    <definition name="newsList" extends="defaultTemplate">
+        <put-attribute name="title" value="page.title.news.portal"/>
+        <put-attribute name="body" value="/src/main/webapp/WEB-INF/jsp/parts/body/news-list.jsp" />
+    </definition>
+    <definition name="authorManage" extends="defaultTemplate">
+        <put-attribute name="title" value="page.title.news.portal"/>
+        <put-attribute name="body" value="/src/main/webapp/WEB-INF/jsp/parts/body/author-manage.jsp"/>
+    </definition>
+    <definition name="tagManage" extends="defaultTemplate">
+        <put-attribute name="title" value="page.title.news.portal"/>
+        <put-attribute name="body" value="/src/main/webapp/WEB-INF/jsp/parts/body/tag-manage.jsp"/>
+    </definition>
+    <definition name="newsAdd" extends="defaultTemplate">
+        <put-attribute name="title" value="page.title.news.portal"/>
+        <put-attribute name="body" value="/src/main/webapp/WEB-INF/jsp/parts/body/news-add.jsp"/>
+    </definition>
+    <definition name="newsMessage" extends="defaultTemplate">
+        <put-attribute name="title" value="page.title.news.portal"/>
+        <put-attribute name="body" value="/src/main/webapp/WEB-INF/jsp/parts/body/one-news-message.jsp"/>
+    </definition>
+</tiles-definitions>
