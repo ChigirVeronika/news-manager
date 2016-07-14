@@ -8,6 +8,9 @@
     <artifactId>NewsManager</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <properties>
+        <spring.ver>4.2.6.RELEASE</spring.ver>
+    </properties>
     <modules>
         <module>news-common</module>
         <module>news-client</module>
