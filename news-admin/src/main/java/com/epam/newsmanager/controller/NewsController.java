@@ -25,4 +25,5 @@ public class NewsController {
     private final static Long newsCountPerPage = 3L;
 
 
+
 }

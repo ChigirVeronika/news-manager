@@ -1,0 +1,16 @@
+.title {
+    color: #057a53;
+    float: left;
+}
+
+.lang-panel {
+    float: right;
+    position: relative;
+    top: 35px;
+}
+
+.header {
+    overflow: hidden;
+    padding-right: 15px;
+    border-bottom: 3px solid #057a53;
+}
