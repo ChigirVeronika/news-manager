@@ -7,39 +7,27 @@ import java.security.NoSuchAlgorithmException;
  * Create password using MD5 hash algorithm
  */
 public class Encoder {
-
-    private static String MD5 = "MD5";
-
     /**
-     * Gets hash with ingoing algorithm, forms hex string and returns it.
-     *
-     * @param input    text in plain format
+     * @param text,    text in plain format
      * @param hashType MD5 OR SHA1
      * @return hash in hashType
      */
-    private static String getHash(String input, String hashType) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance(hashType);
-        messageDigest.update(input.getBytes(), 0, input.length());
-
-        byte[] byteData = messageDigest.digest();
-
-        StringBuffer hexString = new StringBuffer();
-        //convert byte format to hex format
-        for (byte oneByte : byteData) {
-            hexString.append(Integer.toHexString(0xFF & oneByte));
+    public static String getHash(String text, String hashType) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance(hashType);
+        byte[] array = md.digest(text.getBytes());
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < array.length; ++i) {
+            stringBuffer.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
         }
-        return hexString.toString();
+        return stringBuffer.toString();
+
     }
 
-    /**
-     * Get hash according to md5 algorithm
-     *
-     * @param input
-     * @return
-     * @throws NoSuchAlgorithmException
-     */
-    public static String getMD5HashString(String input) throws NoSuchAlgorithmException {
-        return Encoder.getHash(input, MD5);
+    public static String md5(String txt) throws NoSuchAlgorithmException {
+        return Encoder.getHash(txt, "MD5");
     }
 
+    public static String sha1(String txt) throws NoSuchAlgorithmException {
+        return Encoder.getHash(txt, "SHA1");
+    }
 }
