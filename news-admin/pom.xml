@@ -14,13 +14,22 @@
         <apache.tiles.version>3.0.5</apache.tiles.version>
     </properties>
 
-    <dependencies><!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+    <dependencies>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>3.0-alpha-1</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+
+
         <dependency>
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-core</artifactId>
@@ -51,21 +60,23 @@
             <artifactId>tiles-el</artifactId>
             <version>${apache.tiles.version}</version>
         </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
+
+
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.ver}</version>
         </dependency>
+
+
         <dependency>
             <groupId>com.epam.newsmanager</groupId>
             <artifactId>news-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -76,11 +87,7 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.5</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.ver}</version>
-        </dependency>
+
 
     </dependencies>
 
