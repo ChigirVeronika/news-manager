@@ -4,8 +4,7 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 
-    <definition name="defaultTemplate" template="jsp/templates/main-template.jsp">
-        <put-attribute name="title" value="page.title.news.portal"/>
+    <definition name="defaultTemplate" template="/jsp/templates/main-template.jsp">
         <put-attribute name="header" value="jsp/parts/header.jsp" />
         <put-attribute name="menu" value="jsp/parts/menu.jsp" />
         <put-attribute name="body" value="" />
@@ -13,23 +12,25 @@
     </definition>
 
     <definition name="newsList" extends="defaultTemplate">
-        <put-attribute name="title" value="page.title.news.portal"/>
         <put-attribute name="body" value="jsp/parts/body/news-list.jsp" />
     </definition>
-    <definition name="authorManager" extends="defaultTemplate">
-        <put-attribute name="title" value="page.title.news.portal"/>
-        <put-attribute name="body" value="jsp/parts/body/author-manage.jsp"/>
-    </definition>
-    <definition name="tagManager" extends="defaultTemplate">
-        <put-attribute name="title" value="page.title.news.portal"/>
-        <put-attribute name="body" value="jsp/parts/body/tag-manage.jsp"/>
-    </definition>
     <definition name="newsAdder" extends="defaultTemplate">
-        <put-attribute name="title" value="page.title.news.portal"/>
         <put-attribute name="body" value="jsp/parts/body/news-add.jsp"/>
     </definition>
     <definition name="newsMessage" extends="defaultTemplate">
-        <put-attribute name="title" value="page.title.news.portal"/>
         <put-attribute name="body" value="jsp/parts/body/one-news-message.jsp"/>
     </definition>
+
+    <definition name="authorManager" extends="defaultTemplate">
+        <put-attribute name="body" value="jsp/parts/body/author-manage.jsp"/>
+    </definition>
+
+    <definition name="tagManager" extends="defaultTemplate">
+        <put-attribute name="body" value="jsp/parts/body/tag-manage.jsp"/>
+    </definition>
+
+    <definition name="login" extends="defaultTemplate">
+        <put-attribute name="body" value="/jsp/parts/body/login.jsp" />
+    </definition>
+
 </tiles-definitions>

@@ -8,8 +8,51 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>news-client</artifactId>
+    <packaging>war</packaging>
 
+    <properties>
+        <jstl.version>1.2</jstl.version>
+        <jsp.api.version>2.2</jsp.api.version>
+        <servlet.version>3.1.0</servlet.version>
+        <apache.tiles.version>3.0.5</apache.tiles.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.epam</groupId>
+            <artifactId>news-common</artifactId>
+            <version>${news.management.version}</version>
+        </dependency>
+
+        <!-- JSP API -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>${jsp.api.version}</version>
+        </dependency>
+
+        <!-- Servlet API -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Apache tiles -->
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-extras</artifactId>
+            <version>${apache.tiles.version}</version>
+        </dependency>
+
+    </dependencies>
 
 </project>

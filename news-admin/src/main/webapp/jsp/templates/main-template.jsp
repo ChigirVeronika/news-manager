@@ -5,11 +5,7 @@
 
 <html>
 <head>
-    <tiles:importAttribute name="title" />
-    <title><spring:message code="${title}"/></title>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/assets/css/tiles.css'/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/assets/css/main.css'/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/assets/css/multiple-select.css'/>"/>
+
 </head>
 <body>
 <div class="page-tile">
@@ -21,7 +17,7 @@
             <tiles:insertAttribute name="menu"/>
         </div>
         <div class="body-tile">
-            <tiles:insertAttribute name="body"/>
+
         </div>
     </div>
     <div class="footer-tile">
