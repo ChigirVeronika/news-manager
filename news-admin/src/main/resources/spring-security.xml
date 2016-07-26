@@ -9,6 +9,9 @@
     <import resource="classpath*:applicationContext.xml"/>
 
     <security:http auto-config="true">
+        <security:intercept-url pattern="/news/**" access="permitAll"/>
+        <security:intercept-url pattern="/tag/**" access="permitAll"/>
+
         <security:intercept-url pattern="/res/**" access="permitAll"/>
         <security:intercept-url pattern="/auth/**" access="permitAll"/>
         <security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/>

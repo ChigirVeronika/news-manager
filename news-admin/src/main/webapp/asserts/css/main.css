@@ -1,9 +1,10 @@
+/* Header */
 .title {
     color: #057a53;
     float: left;
 }
 
-.lang-panel {
+.language-panel {
     float: right;
     position: relative;
     top: 35px;
@@ -14,3 +15,4 @@
     padding-right: 15px;
     border-bottom: 3px solid #057a53;
 }
+
