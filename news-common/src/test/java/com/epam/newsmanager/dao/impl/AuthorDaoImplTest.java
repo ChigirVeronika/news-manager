@@ -6,6 +6,8 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +30,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Test class with BDUnit technology for AuthorDaoImpl class.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations="classpath:spring-test.xml")
+@ContextConfiguration(locations = { "classpath*:test-db.xml" })
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class,
-        TransactionalTestExecutionListener.class})
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class,
+        DbUnitTestExecutionListener.class})
+@DatabaseSetup("classpath:xmldata/authorData.xml")
+@DatabaseTearDown(value = { "classpath:xmldata/authorData.xml" }, type = DatabaseOperation.DELETE)
 public class AuthorDaoImplTest {
 
     @Autowired
@@ -46,8 +52,8 @@ public class AuthorDaoImplTest {
         Assert.assertNotEquals(0, author.getAuthorId());
     }
 
-    @DatabaseSetup(value = "classpath:dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
-    @DatabaseTearDown(value = "classpath:dataset.xml", type = DatabaseOperation.DELETE_ALL)
+    @ExpectedDatabase(value = "classpath:xmldata/authorDataUpdate.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+    @DatabaseTearDown(value = { "classpath:xmldata/authorDataUpdate.xml" }, type = DatabaseOperation.DELETE)
     @Test
     public void testUpdate() throws Exception {
         Author author = new Author();

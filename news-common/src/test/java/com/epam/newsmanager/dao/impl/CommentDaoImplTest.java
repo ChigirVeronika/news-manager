@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Test class with BDUnit technology for CommentDaoImpl class.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations="classpath:spring-test.xml")
+@ContextConfiguration(locations= "classpath:src/test/resources/test-db.xml")
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
         DbUnitTestExecutionListener.class,
         TransactionalTestExecutionListener.class})

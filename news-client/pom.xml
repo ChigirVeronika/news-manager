@@ -20,9 +20,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.epam</groupId>
+            <groupId>com.epam.newsmanager</groupId>
             <artifactId>news-common</artifactId>
-            <version>${news.management.version}</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <!-- JSP API -->

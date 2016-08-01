@@ -137,4 +137,13 @@ public class AuthorServiceImpl implements AuthorService{
         }
         return author;
     }
+
+    @Override
+    public void markExpired(Long authorId) throws ServiceException {
+        try {
+            authorDao.updateExpired(authorId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

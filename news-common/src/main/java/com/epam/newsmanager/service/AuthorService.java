@@ -70,5 +70,12 @@ public interface AuthorService {
      */
     Author getAuthorByName(Author author) throws ServiceException;
 
-
+    /**
+     * Marks an author with a given id as expired
+     *
+     * @param authorId id of the author to mark expired
+     * @return true if action succeeded
+     * @throws ServiceException if exception occurred on the service or any underlying level
+     */
+    void markExpired(Long authorId) throws ServiceException;
 }

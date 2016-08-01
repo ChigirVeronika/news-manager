@@ -6,18 +6,19 @@
 
 <html>
 <head>
-    <tiles:importAttribute name="header.title" />
     <title><spring:message code="header.title"/></title>
 
     <link rel="stylesheet" type="text/css"
-          href="<c:url value='/asserts/css/main.css'/>" media="all">
+          href="<c:url value='/res/css/main.css'/>" media="all">
+
     <link rel="stylesheet" type="text/css"
-          href="<c:url value='/asserts/css/multiple-select.css'/>" media="all">
-    <link rel="stylesheet" type="text/css"
-          href="<c:url value='/asserts/css/tiles.css'/>" media="all">
+          href="<c:url value='/res/css/tiles.css'/>" media="all">
+
 </head>
 <body>
-<div class="page-tile">
+<div class="flexible-content">
+    <h1 class="header-text"><spring:message code="header.title"/></h1>
+
     <div class="header-tile">
         <tiles:insertAttribute name="header"/>
     </div>
@@ -26,7 +27,7 @@
             <tiles:insertAttribute name="menu"/>
         </div>
         <div class="body-tile">
-            <tiles:insertAttribute name="body" />
+            <tiles:insertAttribute name="body"/>
         </div>
     </div>
     <div class="footer-tile">

@@ -22,7 +22,18 @@
         </property>
     </bean>
 
-    <mvc:resources mapping="/res/**" location="/WEB-INF/asserts/" />
+    <bean
+            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix">
+            <value>/WEB-INF/jsp/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>
+
+
+    <mvc:resources mapping="/res/**" location="/WEB-INF/resources/" />
 
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
