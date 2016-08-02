@@ -1,6 +1,12 @@
 package com.epam.newsmanager.controller.servlet;
 
+import com.epam.newsmanager.controller.command.Command;
+import com.epam.newsmanager.controller.command.CommandHelper;
+import com.epam.newsmanager.controller.exception.CommandException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,6 +15,7 @@ import java.io.IOException;
 /**
  * Main HTTP servlet control all actions in system.
  */
+@WebServlet("/news")
 public class Controller extends HttpServlet {
 
     /**
@@ -43,5 +50,19 @@ public class Controller extends HttpServlet {
         request.setCharacterEncoding("UTF8");
         String commandName = request.getParameter("command");
 
+        Command command = CommandHelper.getInstance().getCommand(commandName);
+
+        String page;
+        try{
+            page = command.execute(request,response);
+        }catch (CommandException e){
+            page = "error.jsp";
+        }
+
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(page);
+
+        if (requestDispatcher != null) {
+            requestDispatcher.forward(request, response);
+        }
     }
 }

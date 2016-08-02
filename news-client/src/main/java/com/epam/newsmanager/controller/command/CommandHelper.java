@@ -13,13 +13,27 @@ public final class CommandHelper {
 
     private final Map<CommandName, Command> commandMap = new HashMap<>();
 
-    public CommandHelper(){
+    public CommandHelper() {
         commandMap.put(CommandName.ADD_COMMENT, new AddCommentCommand());
         commandMap.put(CommandName.CHANGE_LANGUAGE, new ChangeLanguageCommand());
-        commandMap.put(CommandName.CHANGE_LANGUAGE, new ChangeLanguageCommand());
+        commandMap.put(CommandName.SHOW_ONE_NEWS, new ShowOneNewsCommand());
+        commandMap.put(CommandName.SHOW_NEWS_LIST, new ShowNewsListCommand());
     }
 
     public static CommandHelper getInstance() {
         return instance;
+    }
+
+    public Command getCommand(String commandName) {
+        CommandName name = CommandName.valueOf(commandName.toUpperCase());
+        Command command = null;
+        // TODO: 8/2/2016
+        if (name != null) {
+            command = commandMap.get(name);
+        }
+        //else {
+        //   command = commandMap.get(CommandName.UNKNOWN_COMMAND);
+        //}
+        return command;
     }
 }

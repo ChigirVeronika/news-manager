@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition name="defaultTemplate" template="/jsp/templates/main-template.jsp">
+        <put-attribute name="header" value="/jsp/tiles/header.jsp" />
+        <put-attribute name="menu" value="/jsp/tiles/menu.jsp" />
+        <put-attribute name="footer" value="/jsp/tiles/footer.jsp" />
+    </definition>
+
+    <definition name="newsList" extends="defaultTemplate">
+        <put-attribute name="body" value="/jsp/tiles/body/news-list.jsp" />
+    </definition>
+
+    <definition name="newsMessage" extends="defaultTemplate">
+        <put-attribute name="body" value="/jsp/tiles/body/one-news.jsp"/>
+    </definition>
+
+</tiles-definitions>

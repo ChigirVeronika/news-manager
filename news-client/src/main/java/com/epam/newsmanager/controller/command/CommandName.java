@@ -6,6 +6,6 @@ package com.epam.newsmanager.controller.command;
 public enum CommandName {
     ADD_COMMENT,
     CHANGE_LANGUAGE,
-    SHOW_NEWS,
+    SHOW_NEWS_LIST,
     SHOW_ONE_NEWS
 }
