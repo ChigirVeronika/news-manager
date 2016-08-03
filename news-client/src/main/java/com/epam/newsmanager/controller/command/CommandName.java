@@ -7,5 +7,6 @@ public enum CommandName {
     ADD_COMMENT,
     CHANGE_LANGUAGE,
     SHOW_NEWS_LIST,
-    SHOW_ONE_NEWS
+    SHOW_ONE_NEWS,
+    UNKNOWN_COMMAND
 }

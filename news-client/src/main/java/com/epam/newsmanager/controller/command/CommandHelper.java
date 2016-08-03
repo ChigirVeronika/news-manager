@@ -18,6 +18,7 @@ public final class CommandHelper {
         commandMap.put(CommandName.CHANGE_LANGUAGE, new ChangeLanguageCommand());
         commandMap.put(CommandName.SHOW_ONE_NEWS, new ShowOneNewsCommand());
         commandMap.put(CommandName.SHOW_NEWS_LIST, new ShowNewsListCommand());
+        commandMap.put(CommandName.UNKNOWN_COMMAND, new UnknownCommand());
     }
 
     public static CommandHelper getInstance() {
@@ -26,14 +27,13 @@ public final class CommandHelper {
 
     public Command getCommand(String commandName) {
         CommandName name = CommandName.valueOf(commandName.toUpperCase());
-        Command command = null;
-        // TODO: 8/2/2016
+        Command command;
         if (name != null) {
             command = commandMap.get(name);
         }
-        //else {
-        //   command = commandMap.get(CommandName.UNKNOWN_COMMAND);
-        //}
+        else {
+           command = commandMap.get(CommandName.UNKNOWN_COMMAND);
+        }
         return command;
     }
 }
