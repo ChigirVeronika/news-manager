@@ -3,9 +3,9 @@
         "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
+
     <definition name="defaultTemplate" template="/jsp/templates/main-template.jsp">
         <put-attribute name="header" value="/jsp/tiles/header.jsp" />
-        <put-attribute name="menu" value="/jsp/tiles/menu.jsp" />
         <put-attribute name="footer" value="/jsp/tiles/footer.jsp" />
     </definition>
 
@@ -13,8 +13,12 @@
         <put-attribute name="body" value="/jsp/tiles/body/news-list.jsp" />
     </definition>
 
-    <definition name="newsMessage" extends="defaultTemplate">
+    <definition name="oneNews" extends="defaultTemplate">
         <put-attribute name="body" value="/jsp/tiles/body/one-news.jsp"/>
+    </definition>
+
+    <definition name="error" extends="defaultTemplate">
+        <put-attribute name="body" value="/jsp/tiles/body/error.jsp"/>
     </definition>
 
 </tiles-definitions>

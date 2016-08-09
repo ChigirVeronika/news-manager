@@ -5,6 +5,7 @@ import com.epam.newsmanager.controller.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
 
 /**
  * Created by Veranika_Chyhir on 8/1/2016.
@@ -20,6 +21,9 @@ public class ChangeLanguageCommand implements Command {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws CommandException {
-        return null;
+        String language = request.getParameter("language");
+        request.getSession().setAttribute("locale", new Locale(language));
+
+        return request.getSession().getAttribute("page").toString();
     }
 }

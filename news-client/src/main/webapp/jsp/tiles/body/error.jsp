@@ -3,7 +3,11 @@
 
 <fmt:setLocale value="${sessionScope.locale}" />
 <fmt:setBundle basename="i18n.text" />
-
-<div class="footer">
-    <fmt:message key="footer.copyright" />
+<html>
+<body>
+<div class="center-block">
+    <h1><fmt:message key="error.message" /></h1>
+    <a href="${command}"><fmt:message key="news.back" /></a>
 </div>
+</body>
+</html>

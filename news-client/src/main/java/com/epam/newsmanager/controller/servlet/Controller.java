@@ -3,10 +3,11 @@ package com.epam.newsmanager.controller.servlet;
 import com.epam.newsmanager.controller.command.Command;
 import com.epam.newsmanager.controller.command.CommandHelper;
 import com.epam.newsmanager.controller.exception.CommandException;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,8 +16,18 @@ import java.io.IOException;
 /**
  * Main HTTP servlet control all actions in system.
  */
-@WebServlet("/news")
+//@WebServlet("*.jsp")
 public class Controller extends HttpServlet {
+
+    public Controller() {
+        super();
+    }
+
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
+    }
 
     /**
      * Handle get http request
@@ -51,18 +62,18 @@ public class Controller extends HttpServlet {
         String commandName = request.getParameter("command");
 
         Command command = CommandHelper.getInstance().getCommand(commandName);
-
         String page;
-        try{
-            page = command.execute(request,response);
-        }catch (CommandException e){
-            page = "error.jsp";
-        }
 
+        try {
+            page = command.execute(request, response);
+        } catch (CommandException e) {
+            page = "error-page.jsp";
+        }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(page);
 
         if (requestDispatcher != null) {
             requestDispatcher.forward(request, response);
         }
+
     }
 }

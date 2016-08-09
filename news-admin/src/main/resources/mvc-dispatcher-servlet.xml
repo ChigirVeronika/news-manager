@@ -33,7 +33,7 @@
     </bean>
 
 
-    <mvc:resources mapping="/res/**" location="/WEB-INF/resources/" />
+    <mvc:resources mapping="/res/**" location="/WEB-INF/resources/"/>
 
     <mvc:annotation-driven>
         <mvc:argument-resolvers>

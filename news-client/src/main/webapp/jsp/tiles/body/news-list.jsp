@@ -1,16 +1,13 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Veranika_Chyhir
-  Date: 8/2/2016
-  Time: 8:16 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
 
+<fmt:setLocale value="${sessionScope.locale}" />
+<fmt:setBundle basename="i18n.text" />
+
+<html>
+<body>
+News-list body
 </body>
 </html>
+

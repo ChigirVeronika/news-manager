@@ -5,4 +5,18 @@
     <import resource="classpath*:applicationContext.xml"/>
 
 
+    <bean id="addCommentCommand" class="com.epam.newsmanager.controller.command.impl.AddCommentCommand">
+    </bean>
+
+    <bean id="changeLanguageCommand" class="com.epam.newsmanager.controller.command.impl.ChangeLanguageCommand"/>
+
+    <bean id="showNewsListCommand" class="com.epam.newsmanager.controller.command.impl.ShowNewsListCommand">
+    </bean>
+
+    <bean id="showOneNewsCommand" class="com.epam.newsmanager.controller.command.impl.ShowOneNewsCommand">
+    </bean>
+
+    <bean id="unknownCommand" class="com.epam.newsmanager.controller.command.impl.UnknownCommand"/>
+
+
 </beans>
