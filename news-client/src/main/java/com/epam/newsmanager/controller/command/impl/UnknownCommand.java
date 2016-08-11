@@ -20,6 +20,6 @@ public class UnknownCommand implements Command {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws CommandException {
-        return "error.jsp";
+        return "/jsp/error-page.jsp";
     }
 }

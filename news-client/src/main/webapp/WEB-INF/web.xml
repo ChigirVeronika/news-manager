@@ -25,16 +25,6 @@
         <url-pattern>*.tiles</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>mainServlet</servlet-name>
-        <servlet-class>com.epam.newsmanager.controller.servlet.Controller</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>mainServlet</servlet-name>
-        <url-pattern>/news</url-pattern>
-    </servlet-mapping>
-
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>

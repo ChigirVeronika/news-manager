@@ -1,22 +1,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<fmt:setLocale value="${sessionScope.locale}" />
-<fmt:setBundle basename="i18n.text" />
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="pagecontent" />
 
 <div class="page-header">
-    <h1 class="header-title"><fmt:message key="header.title" /></h1>
+    <h1 class="header-title"><fmt:message key="header.title"/></h1>
     <div class="header-lang-panel">
-        <a href="?language=en"><fmt:message key="en" /></a>
-        <a href="?language=ru"><fmt:message key="ru" /></a>
-        <label for="option-1">
-            <input type="radio" id="option-1" onchange="submit()" name="language" value="en" ${language == 'en' ? 'checked' : ''}>
-            <span>EN</span>
-        </label>
-        <label  for="option-2">
-            <input type="radio" id="option-2" onchange="submit()" name="language" value="ru" ${language == 'ru' ? 'checked' : ''}>
-            <span>RU</span>
-        </label>
+        <a href="/main?command=change_language&language=en&page=${pageContext.request.servletPath}"><fmt:message key="en" /></a>
+        <a href="/main?command=change_language&language=ru&page=${pageContext.request.servletPath}"><fmt:message key="ru" /></a>
     </div>
 </div>
 

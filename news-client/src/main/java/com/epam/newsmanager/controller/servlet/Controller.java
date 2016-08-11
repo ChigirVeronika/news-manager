@@ -3,11 +3,10 @@ package com.epam.newsmanager.controller.servlet;
 import com.epam.newsmanager.controller.command.Command;
 import com.epam.newsmanager.controller.command.CommandHelper;
 import com.epam.newsmanager.controller.exception.CommandException;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,18 +15,18 @@ import java.io.IOException;
 /**
  * Main HTTP servlet control all actions in system.
  */
-//@WebServlet("*.jsp")
+@WebServlet("/main")
 public class Controller extends HttpServlet {
 
     public Controller() {
         super();
     }
 
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
-                config.getServletContext());
-    }
+//    public void init(ServletConfig config) throws ServletException {
+//        super.init(config);
+//        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+//                config.getServletContext());
+//    }
 
     /**
      * Handle get http request
@@ -58,22 +57,24 @@ public class Controller extends HttpServlet {
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF8");
+        request.setCharacterEncoding("UTF-8");
         String commandName = request.getParameter("command");
 
         Command command = CommandHelper.getInstance().getCommand(commandName);
-        String page;
 
+        String page;
         try {
             page = command.execute(request, response);
         } catch (CommandException e) {
-            page = "error-page.jsp";
-        }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(page);
-
-        if (requestDispatcher != null) {
-            requestDispatcher.forward(request, response);
+            page ="error-page.jsp";
         }
 
+        RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+        if(dispatcher != null){
+            dispatcher.forward(request, response);
+        }
+        else{
+            response.sendError(response.SC_NO_CONTENT);
+        }
     }
 }

@@ -2,14 +2,22 @@ package com.epam.newsmanager.controller.command.impl;
 
 import com.epam.newsmanager.controller.command.Command;
 import com.epam.newsmanager.controller.exception.CommandException;
+import com.epam.newsmanager.service.AuthorService;
+import com.epam.newsmanager.service.NewsService;
+import com.epam.newsmanager.service.TagService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by Veranika_Chyhir on 8/1/2016.
+ * Show list of news
  */
 public class ShowNewsListCommand implements Command {
+    private static final Long NEWS_COUNT_PER_PAGE = 3L;
+
+    private NewsService newsService;
+    private AuthorService authorService;
+    private TagService tagService;
     /**
      * Execute request corresponding to concrete command
      *

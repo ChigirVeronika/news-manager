@@ -1,16 +1,14 @@
 package com.epam.newsmanager.util;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import java.io.IOException;
 
 /**
  * Implements the following methods from the interface {@link Filter}: init, destroy, doFilter
  */
-@WebFilter(urlPatterns = {"/*"}, initParams = {
-        @WebInitParam(name = "encoding", value = "UTF-8")
-})
+//@WebFilter(urlPatterns = {"/"}, initParams = {
+//        @WebInitParam(name = "encoding", value = "UTF-8")
+//})
 public class CharacterEncodingFilter implements Filter {
     private static final String PARAM_ENCODING_NAME = "encoding";
     private String encoding;
