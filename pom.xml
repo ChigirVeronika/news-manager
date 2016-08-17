@@ -160,7 +160,7 @@
         <server>TomcatServer</server>
         <path>/</path>
         <username>admin</username>
-        <password>password</password>
+        <password>admin</password>
       </configuration>
       </plugin>
     </plugins>
