@@ -156,9 +156,9 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.2</version>
         <configuration>
-        <url>http://localhost:9090</url>
+        <url>http://localhost:9090/manager/text</url>
         <server>TomcatServer</server>
-        <path>/manager</path>
+        <path>/news</path>
         <username>admin</username>
         <password>admin</password>
       </configuration>
